@@ -1,4 +1,5 @@
 #summary Garmin GNS400W/500W WAAS Trainer.
+#labels Featured
 
 = Introduction =
 
