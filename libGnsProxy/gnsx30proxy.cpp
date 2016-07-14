@@ -60,7 +60,6 @@ GNSx30Proxy::~GNSx30Proxy()
 }
 
 
-
 bool GNSx30Proxy::initialize(bool hideGUI)
 {
 	bool res = true;
@@ -129,9 +128,6 @@ bool GNSx30Proxy::initialize(bool hideGUI)
 
 	   if (hSearch == INVALID_HANDLE_VALUE) 
 	   { 
-
-
-
 			strcpy(szG530SIMFileName, m_trainter_path);
 			strcat(szG530SIMFileName, "\\G530SIM.exe");
 		   if(!CopyFile(szG530SIMFileName,m_trainter_exe,FALSE))
@@ -163,13 +159,13 @@ bool GNSx30Proxy::initialize(bool hideGUI)
 			return res;
 		}
 
-	}////find the trainer path and copy the G530SIM.exe to th appropriate executable
+    }////find the trainer path and copy the G530SIM.exe to the appropriate executable
 
 	//Create the registry keys for the trainer
 	{
 
 		HKEY hKey;
-		DWORD dwSize = MAX_PATH;
+//		DWORD dwSize = MAX_PATH;
 		DWORD dwValue;
         DWORD dwValue1;
 		DWORD dwDisposition;
@@ -195,16 +191,14 @@ bool GNSx30Proxy::initialize(bool hideGUI)
 			   return res;
 		}
 
-#if 0
 		//Create the trainer settings values
 		if (ERROR_SUCCESS != RegSetValueEx(hKey, "CDUType", 0, REG_SZ, (LPBYTE)GNS_530AWT, strlen(GNS_530AWT) + 1))
 		{
 			logMessageEx("??? GNSx30Proxy::Initialize Error writing key CDUType");
 
-			   res = -1;
+               res = false;
 			   return res;
 		}
-#endif
 
 		RegFlushKey(hKey);
 		RegCloseKey(hKey);
@@ -258,9 +252,6 @@ bool GNSx30Proxy::initialize(bool hideGUI)
 		}
 		RegFlushKey(hKey);
 		RegCloseKey(hKey);
-
-
-
 	}
 
 	//Create the shared data structure
@@ -311,7 +302,7 @@ bool GNSx30Proxy::open(int gnsType)
     DWORD dwDisposition;
 
     //Default frquencies
-    m_comActive = 134100;
+    m_comActive = 123000;
     m_comStandby = 130825;
     m_navActive = 108700;
     m_navStandby = 111450;
@@ -321,13 +312,11 @@ bool GNSx30Proxy::open(int gnsType)
     m_pvData->garminTrainerPort = TRAINER_PORT;
     m_pvData->proxyPort = PROXY_PORT;
 
-
     //Start the serverThread
     m_pServerSocketThread = new UdpSocketThread(m_pvData->proxyPort);
     m_pServerSocketThread->create();
     m_pServerSocketThread->setCallback(UdpDataCallback, this);
     m_pServerSocketThread->resume();
-    
 
     m_pClientSocket  = new UdpSocket();
     m_pClientSocket->openForSending("127.0.0.1", m_pvData->garminTrainerPort);
@@ -370,14 +359,9 @@ bool GNSx30Proxy::open(int gnsType)
     RegFlushKey(hKey);
     RegCloseKey(hKey);
 
-
-
 	memset(m_pvData->LCD_data,0x00, OFFSCREEN_BUFFER_WIDTH*OFFSCREEN_BUFFER_HEIGHT*4);
 
     startAndInject(m_trainter_exe, m_trainter_path, m_interface_lib, m_hideGUI);
-
-
-
 
 	int count = 0;
 	bool procesStarted = false;
@@ -400,7 +384,6 @@ bool GNSx30Proxy::open(int gnsType)
 		return res;
 
 	}
-
 
     m_state = stateOpened;
 

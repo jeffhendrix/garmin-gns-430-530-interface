@@ -112,7 +112,7 @@ typedef struct _SharedObjShr
 typedef struct _GNSIntf
 {
 	// must be first
-	unsigned long LCD_data[OFFSCREEN_BUFFER_WIDTH*OFFSCREEN_BUFFER_HEIGHT]; // this should eb the exact size as the BITMAP_WIDTH in the info
+    unsigned long LCD_data[OFFSCREEN_BUFFER_WIDTH*OFFSCREEN_BUFFER_HEIGHT]; // this should eb the exact size as the BITMAP_WIDTH in the info
     unsigned long lcd_width;
     unsigned long lcd_height;
     bool          LCDUpdated;
@@ -132,9 +132,6 @@ typedef struct _GNSIntf
     unsigned long gnsType;
     unsigned short garminTrainerPort;
     unsigned short proxyPort;
-
-
-
 	
 	//Auto pilot 
 	//Override xplane gps, will be set to 1 when valid desired track is set to TrainerShrObj
@@ -145,7 +142,6 @@ typedef struct _GNSIntf
 	unsigned short vcdi; //2048 is in the middle
 	unsigned short lcdi; 
 	float			cdi_horizontal_offtrack;
-
 	
 }GNSIntf;
 

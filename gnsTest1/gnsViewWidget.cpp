@@ -25,17 +25,15 @@ GnsViewWidget::~GnsViewWidget()
 
 }
 
-
 void GnsViewWidget::setGNSx30Proxy(GNSx30Proxy* pGNSx30Proxy)
 {
     m_pGNSx30Proxy = pGNSx30Proxy;
 }
 
-
 int GnsViewWidget::getW()
 {
     return DEFAULT_W;
-#if 0
+
     if(NULL != m_pGNSx30Proxy)
     {
         GNSIntf* pGNSIntf = m_pGNSx30Proxy->getInterface();
@@ -44,13 +42,12 @@ int GnsViewWidget::getW()
     {
         return DEFAULT_W;
     }
-#endif
 }
 
 int GnsViewWidget::getH()
 {
     return DEFAULT_H;
-#if 0
+
     if(NULL != m_pGNSx30Proxy)    
     {
         GNSIntf* pGNSIntf = m_pGNSx30Proxy->getInterface();
@@ -59,7 +56,7 @@ int GnsViewWidget::getH()
     {
         return DEFAULT_H;
     }
-#endif
+
 }
 
 void GnsViewWidget::initializeGL()
@@ -108,7 +105,6 @@ void GnsViewWidget::paintGL()
     glClearColor(0,0,0, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-#if 0
     if(NULL != m_pGNSx30Proxy)
     {
         GNSIntf* pGNSIntf = m_pGNSx30Proxy->getInterface();
@@ -197,7 +193,7 @@ void GnsViewWidget::paintGL()
 
         glEnd();
     }
-#endif
+
     //Restart the timer because it is in single step mode
     m_updateTimer.start();
 }
@@ -221,7 +217,6 @@ void GnsViewWidget::onUpdateTimer()
 
 void GnsViewWidget::mousePressEvent ( QMouseEvent * event )
 {
-#if 0
     if(NULL != m_pGNSx30Proxy)    
     {
         GNSIntf* pGNSIntf = m_pGNSx30Proxy->getInterface();
@@ -238,5 +233,5 @@ void GnsViewWidget::mousePressEvent ( QMouseEvent * event )
         m_pGNSx30Proxy->sendMsg(1, x*pGNSIntf->bezel_width, y*pGNSIntf->bezel_height);
 
     }
-#endif
+
 }

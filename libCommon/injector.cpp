@@ -311,7 +311,6 @@ int startAndInject(char* pExeName, char* pExePath, char* pLibFile, bool hideGUI)
         siStartupInfo.wShowWindow = SW_HIDE;
     }
     
-    
     CreateProcess(NULL, pExeName,
                              0, 0, false,
                             CREATE_SUSPENDED | CREATE_UNICODE_ENVIRONMENT, 
