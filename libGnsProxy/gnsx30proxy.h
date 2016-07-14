@@ -35,17 +35,17 @@ public:
 
 
     //COM functions
-    unsigned long getCOMActiveFrequency() { return m_comActive;};
+    unsigned long getCOMActiveFrequency() { return m_comActive;}
     void  setCOMActiveFrequency(unsigned long freq);
 
-    unsigned long getCOMStandbyFrequency() { return m_comStandby;};
+    unsigned long getCOMStandbyFrequency() { return m_comStandby;}
     void  setCOMStandbyFrequency(unsigned long freq);
 
     //NAV functions
-    unsigned long getNAVActiveFrequency() { return m_navActive;};
+    unsigned long getNAVActiveFrequency() { return m_navActive;}
     void  setNAVActiveFrequency(unsigned long freq);
 
-    unsigned long getNAVStandbyFrequency() { return m_navStandby;};
+    unsigned long getNAVStandbyFrequency() { return m_navStandby;}
     void  setNAVStandbyFrequency(unsigned long freq);
 
 

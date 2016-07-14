@@ -75,7 +75,7 @@ bool GNSx30Proxy::initialize(bool hideGUI)
 
     m_hideGUI = hideGUI;
 
-	//find the trainer path and copy the G530SIM.exe to th appropriate executable
+    //find the trainer path and copy the G530SIM.exe to the appropriate executable
 	{
 		HKEY hKey;
 		DWORD dwSize = MAX_PATH;
@@ -88,7 +88,6 @@ bool GNSx30Proxy::initialize(bool hideGUI)
 		unsigned long CRCVal;
 
 		char trainerpath[MAX_PATH];   
-
 
 		lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
 					G530SIMEXE_PATH, 0, KEY_READ, &hKey);

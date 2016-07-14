@@ -2,6 +2,7 @@
 #define _MAINWINDOW_H_
 
 #include <QtGui>
+#include <QInputDialog>
 
 #include "ui_mainWindow.h"
 #include "gnsx30Proxy.h"
@@ -12,7 +13,7 @@ class MainWindow : public QWidget
 
 public:
 
-    MainWindow(QWidget* pParent=0, Qt::WFlags flag=0);
+    MainWindow(QWidget* pParent=0, Qt::WindowFlags flag=0);
     ~MainWindow();
 
     void    updateGUI();

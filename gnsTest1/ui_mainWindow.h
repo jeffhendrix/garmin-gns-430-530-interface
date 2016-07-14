@@ -11,21 +11,21 @@
 #define UI_MAINWINDOW_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QComboBox>
-#include <QtGui/QDoubleSpinBox>
-#include <QtGui/QFrame>
-#include <QtGui/QGridLayout>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QPushButton>
-#include <QtGui/QSpacerItem>
-#include <QtGui/QTabWidget>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QWidget>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QDoubleSpinBox>
+#include <QtWidgets/QFrame>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QTabWidget>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QWidget>
 #include "gnsViewWidget.h"
 
 QT_BEGIN_NAMESPACE
@@ -355,33 +355,33 @@ public:
 
     void retranslateUi(QWidget *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Main window GNS", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("MainWindow", "Active", 0, QApplication::UnicodeUTF8));
-        btnCOMActiveSet->setText(QApplication::translate("MainWindow", "Set", 0, QApplication::UnicodeUTF8));
-        label_2->setText(QApplication::translate("MainWindow", "Standby", 0, QApplication::UnicodeUTF8));
-        btnCOMStandbySet->setText(QApplication::translate("MainWindow", "Set", 0, QApplication::UnicodeUTF8));
-        tabControl->setTabText(tabControl->indexOf(tabCOM), QApplication::translate("MainWindow", "COM", 0, QApplication::UnicodeUTF8));
-        label_3->setText(QApplication::translate("MainWindow", "Active", 0, QApplication::UnicodeUTF8));
-        btnNAVActiveSet->setText(QApplication::translate("MainWindow", "Set", 0, QApplication::UnicodeUTF8));
-        label_4->setText(QApplication::translate("MainWindow", "Standby", 0, QApplication::UnicodeUTF8));
-        btnNAVStandbySet->setText(QApplication::translate("MainWindow", "Set", 0, QApplication::UnicodeUTF8));
-        tabControl->setTabText(tabControl->indexOf(tabNAV), QApplication::translate("MainWindow", "NAV", 0, QApplication::UnicodeUTF8));
-        label_5->setText(QApplication::translate("MainWindow", "Latitude (deg)", 0, QApplication::UnicodeUTF8));
-        label_6->setText(QApplication::translate("MainWindow", "Speed (m/s)", 0, QApplication::UnicodeUTF8));
-        label_7->setText(QApplication::translate("MainWindow", "VerticalSpeed (m/s)", 0, QApplication::UnicodeUTF8));
-        label_8->setText(QApplication::translate("MainWindow", "Longitude (deg)", 0, QApplication::UnicodeUTF8));
-        label_9->setText(QApplication::translate("MainWindow", "Heading (deg)", 0, QApplication::UnicodeUTF8));
-        label_10->setText(QApplication::translate("MainWindow", "Altitude (m)", 0, QApplication::UnicodeUTF8));
-        btnSetGPS->setText(QApplication::translate("MainWindow", "Set", 0, QApplication::UnicodeUTF8));
-        btnSimulateGPS->setText(QApplication::translate("MainWindow", "Simulate", 0, QApplication::UnicodeUTF8));
-        tabControl->setTabText(tabControl->indexOf(tabGPS), QApplication::translate("MainWindow", "GPS", 0, QApplication::UnicodeUTF8));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Main window GNS", 0));
+        label->setText(QApplication::translate("MainWindow", "Active", 0));
+        btnCOMActiveSet->setText(QApplication::translate("MainWindow", "Set", 0));
+        label_2->setText(QApplication::translate("MainWindow", "Standby", 0));
+        btnCOMStandbySet->setText(QApplication::translate("MainWindow", "Set", 0));
+        tabControl->setTabText(tabControl->indexOf(tabCOM), QApplication::translate("MainWindow", "COM", 0));
+        label_3->setText(QApplication::translate("MainWindow", "Active", 0));
+        btnNAVActiveSet->setText(QApplication::translate("MainWindow", "Set", 0));
+        label_4->setText(QApplication::translate("MainWindow", "Standby", 0));
+        btnNAVStandbySet->setText(QApplication::translate("MainWindow", "Set", 0));
+        tabControl->setTabText(tabControl->indexOf(tabNAV), QApplication::translate("MainWindow", "NAV", 0));
+        label_5->setText(QApplication::translate("MainWindow", "Latitude (deg)", 0));
+        label_6->setText(QApplication::translate("MainWindow", "Speed (m/s)", 0));
+        label_7->setText(QApplication::translate("MainWindow", "VerticalSpeed (m/s)", 0));
+        label_8->setText(QApplication::translate("MainWindow", "Longitude (deg)", 0));
+        label_9->setText(QApplication::translate("MainWindow", "Heading (deg)", 0));
+        label_10->setText(QApplication::translate("MainWindow", "Altitude (m)", 0));
+        btnSetGPS->setText(QApplication::translate("MainWindow", "Set", 0));
+        btnSimulateGPS->setText(QApplication::translate("MainWindow", "Simulate", 0));
+        tabControl->setTabText(tabControl->indexOf(tabGPS), QApplication::translate("MainWindow", "GPS", 0));
         cmbModel->clear();
         cmbModel->insertItems(0, QStringList()
-         << QApplication::translate("MainWindow", "GNS 430 WAAS", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("MainWindow", "GNS 530 WAAS", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "GNS 430 WAAS", 0)
+         << QApplication::translate("MainWindow", "GNS 530 WAAS", 0)
         );
-        btnStart->setText(QApplication::translate("MainWindow", "Start", 0, QApplication::UnicodeUTF8));
-        btnStop->setText(QApplication::translate("MainWindow", "Stop", 0, QApplication::UnicodeUTF8));
+        btnStart->setText(QApplication::translate("MainWindow", "Start", 0));
+        btnStop->setText(QApplication::translate("MainWindow", "Stop", 0));
     } // retranslateUi
 
 };

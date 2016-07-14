@@ -10,7 +10,6 @@ m_port(port)
 
     m_callback = NULL;
     m_pCallbackContext = NULL; 
-
 }
 
 UdpSocketThread::~UdpSocketThread()

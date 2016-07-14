@@ -3,9 +3,6 @@
 
 #include <windows.h>
 
-
-
-
 class UdpSocket
 {
 	

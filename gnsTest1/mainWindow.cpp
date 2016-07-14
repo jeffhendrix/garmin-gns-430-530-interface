@@ -3,7 +3,7 @@
 
 #define DEG2RAD (0.0174532925f)
 
-MainWindow::MainWindow(QWidget* pParent, Qt::WFlags flags)
+MainWindow::MainWindow(QWidget* pParent, Qt::WindowFlags flags)
     : QWidget(pParent, flags)
 {
     
@@ -19,10 +19,7 @@ MainWindow::MainWindow(QWidget* pParent, Qt::WFlags flags)
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(onUpdateTimer()));
     m_updateTimer.setInterval(500);
     //m_updateTimer.setSingleShot(true);
-    m_updateTimer.start();
-
-
-    
+    m_updateTimer.start();   
 }
 
 MainWindow::~MainWindow()
@@ -50,13 +47,9 @@ void MainWindow::updateGUI()
 
 void MainWindow::resizeEvent ( QResizeEvent * event )
 {
-
     QWidget::resizeEvent(event);
 
-
     QTimer::singleShot(10, this, SLOT(onRepositionViewWidget()));
-
-
 }
 
 void MainWindow::onUpdateTimer()
@@ -64,11 +57,8 @@ void MainWindow::onUpdateTimer()
     updateGUI();
 }
 
-
-
 void MainWindow::onRepositionViewWidget()
 {
-
     int view_width = ui.gnsViewWidget->getW();
     int view_height = ui.gnsViewWidget->getH();
 
@@ -100,11 +90,7 @@ void MainWindow::onRepositionViewWidget()
         x = 0;
         y = (box_height-h)/2;
     }
-
-
     ui.gnsViewWidget->setGeometry(x, y, w, h);
-
-
 }
 
 void MainWindow::on_btnStart_clicked ( bool checked  )
@@ -130,7 +116,6 @@ void MainWindow::on_btnStop_clicked ( bool checked  )
 
     ui.gnsViewWidget->setGNSx30Proxy(NULL);
     QTimer::singleShot(10, this, SLOT(onRepositionViewWidget()));
-
 }
 
 //COM
@@ -155,8 +140,6 @@ void MainWindow::on_btnCOMStandbySet_clicked ( bool checked )
     {
         m_GNSx30Proxy.setCOMStandbyFrequency(val);
     }
-    
-
 }
 
 //NAV
@@ -181,8 +164,6 @@ void MainWindow::on_btnNAVStandbySet_clicked ( bool checked )
     {
         m_GNSx30Proxy.setNAVStandbyFrequency(val);
     }
-
-
 }
 
 //GPS
@@ -200,7 +181,6 @@ void MainWindow::on_btnSetGPS_clicked ( bool checked )
                                 ui.spinVerticalSpeed->value(),
                                 ui.spinAltitude->value()
                             );
-
 }
 
 void MainWindow::on_btnSimulateGPS_clicked ( bool checked )
