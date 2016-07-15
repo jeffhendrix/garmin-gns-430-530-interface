@@ -18,7 +18,6 @@ BOOL APIENTRY DllMain( HMODULE hModule,
         {
             DisableThreadLibraryCalls( hModule );
 
-
             GetModuleFileNameA(GetModuleHandle(0), moduleName, sizeof(moduleName));
             sprintf(logFileName, "%s.log", moduleName);
             logInit(logFileName);

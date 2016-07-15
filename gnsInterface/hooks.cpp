@@ -16,28 +16,21 @@
 //#pragma warning TEST
 #include "testhooks.h"
 
-
 Hooks* Hooks::m_gInstance = NULL;
-
 
 void UdpDataCallback(void* pData, int dataSize, void* context)
 {
     Hooks* pHooks = (Hooks*)context;
     pHooks->processUdpData(pData, dataSize);
-
 }
-
-
 
 Hooks::Hooks()
 {
-
 
 }
 
 Hooks::~Hooks()
 {
-
 
 }
 
@@ -49,11 +42,7 @@ Hooks* Hooks::instanace()
     }
 
     return m_gInstance;
-
-
 }
-
-
 
 bool Hooks::hookGnsx30(HMODULE hModule)
 {
@@ -72,11 +61,9 @@ bool Hooks::hookGnsx30(HMODULE hModule)
     m_pServerSocketThread->create();
     m_pServerSocketThread->setCallback(UdpDataCallback, this);
     m_pServerSocketThread->resume();
-    
 
     m_pClientSocket  = new UdpSocket();
     m_pClientSocket->openForSending("127.0.0.1", pIntf->proxyPort);
-
 
     pIntf->bezel_width = 0;
     pIntf->bezel_height = 0;
@@ -97,8 +84,6 @@ bool Hooks::hookGnsx30(HMODULE hModule)
         pIntf->bezel_lcd_left = 110;
         pIntf->bezel_lcd_width = 240;
         pIntf->bezel_lcd_height = 128;
-
-
     }else  if(TYPE_GNS530 == pIntf->gnsType)
     {
         //Read the bezel bitmaps from the Gns exe
@@ -111,8 +96,6 @@ bool Hooks::hookGnsx30(HMODULE hModule)
         pIntf->bezel_lcd_top = 27;
         pIntf->bezel_lcd_width = 320;
         pIntf->bezel_lcd_height = 234;
-
-
     }
 
     ::GetObject (hBmp, sizeof (bezelBMP), &bezelBMP);
@@ -138,7 +121,6 @@ bool Hooks::hookGnsx30(HMODULE hModule)
     //memcpy(pIntf->Bezel_data, bezelBMP.bmBits, bezelBMP.bmWidthBytes*bezelBMP.bmHeight);
 
     pIntf->BezelUpdated = true;
-    
 
     logMessageEx("--- bezelBMP=%dx%d widthBytes=%d", bezelBMP.bmWidth, bezelBMP.bmHeight, bezelBMP.bmWidthBytes);
 
@@ -160,7 +142,6 @@ bool Hooks::hookGnsx30(HMODULE hModule)
     TestHooks::instanace()->hook(m_pShared);
 #endif
 
-
 	//Fix the SIMULATING in the sys_resources
 	{
 		//SIMULATING string begins at address 10038444 pointed from address 1002f4da
@@ -180,7 +161,6 @@ bool Hooks::hookGnsx30(HMODULE hModule)
 	return res;
 }
 
-
 bool Hooks::notifyFreqencyChange(FreqInfo* pInfo)
 {
     bool res = true;
@@ -194,7 +174,6 @@ bool Hooks::notifyFreqencyChange(FreqInfo* pInfo)
 
     return res;
 }
-
 
 void Hooks::processUdpData(void* pData, int dataSize)
 {
@@ -246,8 +225,6 @@ void Hooks::processUdpData(void* pData, int dataSize)
 
                 break;
             }
-
-
         }
     }
 }

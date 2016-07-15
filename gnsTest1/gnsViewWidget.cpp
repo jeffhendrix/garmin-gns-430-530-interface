@@ -56,7 +56,6 @@ int GnsViewWidget::getH()
     {
         return DEFAULT_H;
     }
-
 }
 
 void GnsViewWidget::initializeGL()

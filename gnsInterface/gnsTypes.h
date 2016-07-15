@@ -13,7 +13,6 @@ enum MSG_TYPE
     MSG_GPS_INFO
 };
 
-
 typedef struct _FreqInfo
 {
     unsigned char msgType;
@@ -30,12 +29,6 @@ typedef struct _GPSInfo
     float		  verticalSpeed; //0=>
     float		  altitude; // m
 }GPSInfo;
-
-
-
-
-
-
 
 //0 - 0D 00 3F 00 
 //4 - 05 00 short hfom
@@ -100,19 +93,15 @@ typedef struct _SharedObjShr
 	float	requested_speed;
 	//76-79
 	float	requested_hdg; // only in hdg mode
-
-
-
 }SharedObjShr;
 
 
 #pragma pack(pop)
 
-
 typedef struct _GNSIntf
 {
 	// must be first
-    unsigned long LCD_data[OFFSCREEN_BUFFER_WIDTH*OFFSCREEN_BUFFER_HEIGHT]; // this should eb the exact size as the BITMAP_WIDTH in the info
+    unsigned long LCD_data[OFFSCREEN_BUFFER_WIDTH*OFFSCREEN_BUFFER_HEIGHT]; // this should be the exact size as the BITMAP_WIDTH in the info
     unsigned long lcd_width;
     unsigned long lcd_height;
     bool          LCDUpdated;
@@ -128,7 +117,6 @@ typedef struct _GNSIntf
     unsigned long Bezel_data[OFFSCREEN_BUFFER_WIDTH*OFFSCREEN_BUFFER_HEIGHT]; // this should be the exact size as the BITMAP_WIDTH in the info
     bool          BezelUpdated;
 
-    
     unsigned long gnsType;
     unsigned short garminTrainerPort;
     unsigned short proxyPort;
@@ -145,6 +133,4 @@ typedef struct _GNSIntf
 	
 }GNSIntf;
 
-
-
-#endif __GNS_TYPES__
+#endif //__GNS_TYPES__

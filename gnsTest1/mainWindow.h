@@ -43,6 +43,4 @@ private:
     Ui::MainWindow ui;
 };
 
-
-
 #endif // _MAINWINDOW_H_

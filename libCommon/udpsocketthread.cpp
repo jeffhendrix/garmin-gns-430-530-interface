@@ -24,7 +24,6 @@ void UdpSocketThread::terminate()
     m_socket.close();
     join();
     //logMessageEx("--- UdpSocketThread::terminate EXIT");
-
 }
 
 void UdpSocketThread::run()
@@ -46,12 +45,10 @@ void UdpSocketThread::run()
             }
         }
     }
-
 }
 
 void UdpSocketThread::setCallback(UdpDataCallback_t callback, void* pContext)
 {
     m_callback = callback;
     m_pCallbackContext = pContext; 
-
 }

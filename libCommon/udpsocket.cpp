@@ -37,10 +37,8 @@ int UdpSocket::openForSending(char* dest_address, unsigned short dest_port)
 
 	udp_socket = socket(AF_INET, SOCK_DGRAM, 0);
 
-
 	return res;
 }
-
 
 int UdpSocket::openForReceiving(unsigned short port)
 {
@@ -57,11 +55,7 @@ int UdpSocket::openForReceiving(unsigned short port)
 	
 	peerlen=sizeof(peer);
 
-
-	
-
 	return res;
-
 }
 
 int UdpSocket::send(const char* data, unsigned short size)

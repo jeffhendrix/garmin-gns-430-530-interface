@@ -286,8 +286,7 @@ void  IopSimHooks::setGPSInfo(double	latitude, double longitude, float speed, fl
     m_heading = heading;
     m_verticalSpeed = verticalSpeed;
     m_altitude = altitude;
-
-
+	
     //logMessageEx("--- IopSimHooks::setGPSInfo %f, %f, %f %f %f, %f", 
     //               m_latitude,
     //               m_longitude,
@@ -298,7 +297,3 @@ void  IopSimHooks::setGPSInfo(double	latitude, double longitude, float speed, fl
 
     unlock();
 }
-
-
-
-

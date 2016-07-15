@@ -41,8 +41,6 @@ typedef struct _region
 	//top right
 	float x2; 
 	float y2;
-
-
 }region;
 
 //Utiliti functions
@@ -59,16 +57,11 @@ int		destroyGNSWindow();
 int		initClickRegions();
 int		coordInRect(int x, int y, region* reg);
 
-
 region regionLCD;
-
-
 
 /* Global variables */
 //test
 int mouse_x, mouse_y;
-
-
 
 //textures
 #define GL_BGR 0x80E0
@@ -89,10 +82,6 @@ bool			autopilotConnected;
 float			dtk;
 unsigned short   lcdi;
 unsigned short   vcdi;
-
-
-
-
 
 int			gPluginEnabled = 0;
 float		gUpdateInterval = (float)0.01;
@@ -185,8 +174,6 @@ XPLMDataRef		g_nav1_vdef_dot_ref = NULL;
 XPLMDataRef		g_nav1_fromto_ref = NULL;
 */
 
-
-
 double			latitude;
 double			longitude;
 float			heading;
@@ -213,12 +200,8 @@ float			nav1_vdef_dot;
 int				nav1_fromto;
 */
 
-
-
-
 XPLMDataRef myXPLMFindDataRef(const char * inDataRefName)
 {
-	
 	XPLMDataRef DataRef=XPLMFindDataRef(inDataRefName);
 	if (DataRef==NULL)
 	{
@@ -332,10 +315,6 @@ void myMenuHandlerCallback(void* inMenuRef, void* inItemRef)
 
 		}
 	}
-
-
-
-	
 }
 
 
@@ -358,7 +337,6 @@ void myHandleKeyCallback(XPLMWindowID inWindowID, char inKey, XPLMKeyFlags inFla
 {
     // Empty
     return;
-
 }                                   
 
 // MyHandleMouseClickCallback
@@ -423,21 +401,16 @@ int myHandleMouseClickCallback(XPLMWindowID inWindowID, int x, int y, XPLMMouseS
 
 		}else
 		{
-			
-
 			gGNSx30Proxy.sendMsg(0,mouse_pos_x ,mouse_pos_y );
 
             //logMessageEx("### xplm_MouseDown sendMsg(%d,%d)", mouse_pos_x ,mouse_pos_y);
 		}
-
 
 		break;
 	case xplm_MouseDrag:
 		/// We are dragging so update the window position
 		if (gDragging)
 		{
-
-    
 			Left+= (x - Left) - dX;
 			Right = Left + Width;
 			Bottom += (y - Bottom) - dY;
@@ -449,7 +422,6 @@ int myHandleMouseClickCallback(XPLMWindowID inWindowID, int x, int y, XPLMMouseS
 			XPLMSetWindowGeometry(inWindowID, Left, Top, Right, Bottom);
 
             //logMessageEx("### xplm_MouseDrag");
-
 		}
 		break;
 	case xplm_MouseUp:
@@ -474,22 +446,12 @@ int myHandleMouseClickCallback(XPLMWindowID inWindowID, int x, int y, XPLMMouseS
 
 		}
 
-        
-
 		gDragging = 0;
-
-
 
 		break;
 	}
-
-	
-
-
 	return 1;
-
 }                                      
-
 
 XPLMCursorStatus myHandleCursorCallback(XPLMWindowID inWindowID, int x, int y, void *inRefcon)
 {
@@ -501,7 +463,6 @@ XPLMCursorStatus myHandleCursorCallback(XPLMWindowID inWindowID, int x, int y, v
 	}
 
 	return res;
-
 }
 
 int myHandleMouseWheelFunc(XPLMWindowID inWindowID, int x, int y, int wheel, int clicks, void *inRefcon)   
@@ -511,21 +472,16 @@ int myHandleMouseWheelFunc(XPLMWindowID inWindowID, int x, int y, int wheel, int
 	return res;
 }
 
-
 PLUGIN_API int XPluginStart(
 							char *		outName,
 							char *		outSig,
 							char *		outDesc)
 {
-	
-
-	
 	// Provide our plugin's profile to the plugin system.
 	strcpy(outName, PLUGIN_NAME);
 	strcpy(outSig, "xplane.fly.elise-ng." PLUGIN_NAME);
 	strcpy(outDesc, "Plugin interface to the Garmin GNS430/530 trainer.");
 	
-
 	if(0 != openLogFile())
 	{
 		return 0;
@@ -576,8 +532,6 @@ PLUGIN_API void	XPluginStop(void)
 
 	logMessageEx("--- Plugin stopped");
 	
-	
-	
 }
 
 PLUGIN_API void XPluginDisable(void)
@@ -601,7 +555,6 @@ PLUGIN_API void XPluginReceiveMessage(
 									  long			inMessage,
 									  void *			inParam)
 {
-	
 	char*	msg;
 	
 	if(XPLM_MSG_PLANE_CRASHED == inMessage)
@@ -626,8 +579,6 @@ PLUGIN_API void XPluginReceiveMessage(
 
 int	myDrawGNSCallback(XPLMDrawingPhase inPhase, int inIsBefore, void *inRefcon)
 {
-	
-
 	if(!gnsVisible)
 	{
 		return -1;
@@ -665,14 +616,10 @@ int	myDrawGNSCallback(XPLMDrawingPhase inPhase, int inIsBefore, void *inRefcon)
 	glVertex2f((float)gpGNSIntf->bezel_width, (float)gpGNSIntf->bezel_height);	// Top Right Of The Texture and Quad
 	glEnd();
 
-    
-	
 	XPLMBindTexture2d(gTexture[TEX_LCD], GL_TEXTURE_2D);
 
 	if(gpGNSIntf->LCDUpdated)
 	{
-
-
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -680,14 +627,11 @@ int	myDrawGNSCallback(XPLMDrawingPhase inPhase, int inIsBefore, void *inRefcon)
 
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gpGNSIntf->lcd_width, gpGNSIntf->lcd_height, 0, GL_BGR, GL_UNSIGNED_BYTE, gpGNSIntf->LCD_data);
 
-
 	    gpGNSIntf->LCDUpdated = false;
 	}
 
-
 	//float gltexture_x = (float)gpGNSIntf->lcd_width/(float)gpGNSIntf->lcd_width	;
 	//float gltexture_y = (float)gpGNSIntf->lcd_height/(float)gpGNSIntf->lcd_height;
-	
 
     //glPopMatrix();
     //glPushMatrix();
@@ -709,10 +653,8 @@ int	myDrawGNSCallback(XPLMDrawingPhase inPhase, int inIsBefore, void *inRefcon)
     glTexCoord2f(1, 1.0f); 
     glVertex2f((float)gpGNSIntf->bezel_lcd_width, (float)gpGNSIntf->bezel_lcd_height);	// Top Right Of The Texture and Quad
 
-
     glEnd();
 	
-
 	glPopMatrix();
 	
 	glFlush();
@@ -720,11 +662,8 @@ int	myDrawGNSCallback(XPLMDrawingPhase inPhase, int inIsBefore, void *inRefcon)
 	return 1;
 }
 
-
 float	myFlightLoopCallback(float inElapsedSinceLastCall, float inElapsedTimeSinceLastFlightLoop, int inCounter, void * inRefcon)
 {
-	
-	
 	if(gPluginEnabled && gnsOpened)
 	{
 #if 0 //FIXME
@@ -732,7 +671,6 @@ float	myFlightLoopCallback(float inElapsedSinceLastCall, float inElapsedTimeSinc
 		{
 			XPLMSetDatai(g_override_autopilot_ref, 1); 
 			XPLMSetDatai(g_autopilot_state_ref, 512); //see doc (HNAV engaged)
-		
 			
 			override_gps = 1;//;pIntf->override_gps;
 			XPLMSetDatai(g_override_gps_ref, override_gps); 
@@ -754,8 +692,6 @@ float	myFlightLoopCallback(float inElapsedSinceLastCall, float inElapsedTimeSinc
 			XPLMSetDatai(g_override_autopilot_ref, 0); 	
 		}
 #endif
-
-        
         
         //Set the COM frequencies			
 		XPLMSetDatai(g_com1_active_ref, gGNSx30Proxy.getCOMActiveFrequency()/10);
@@ -763,7 +699,6 @@ float	myFlightLoopCallback(float inElapsedSinceLastCall, float inElapsedTimeSinc
 		
 		XPLMSetDatai(g_nav1_active_ref, gGNSx30Proxy.getNAVActiveFrequency()/10);
         XPLMSetDatai(g_nav1_standby_ref, gGNSx30Proxy.getNAVStandbyFrequency()/10);
-
 
 		latitude = XPLMGetDatad(g_latitude_ref);
 		longitude = XPLMGetDatad(g_longitude_ref);
@@ -789,16 +724,9 @@ float	myFlightLoopCallback(float inElapsedSinceLastCall, float inElapsedTimeSinc
 }
 
 
-
-
-
-
 int initTextures()
 {
 	int res = 0;
-
-
-	
 	
 	XPLMGenerateTextureNumbers(&gTexture[0], 2);
 	
@@ -813,8 +741,6 @@ int initTextures()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-
-
 	XPLMBindTexture2d(gTexture[TEX_LCD], GL_TEXTURE_2D);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gpGNSIntf->lcd_width, gpGNSIntf->lcd_height, 0, GL_BGR, GL_UNSIGNED_BYTE, gpGNSIntf->LCD_data);
 	
@@ -828,9 +754,6 @@ int initTextures()
 
 	return res;
 }
-
-
-
 
 int   loadSettings()
 {
@@ -891,9 +814,7 @@ int   saveSettings()
 	logMessageEx("--- Configuration data saved");
 
 	return res;
-
 }
-
 
 int   openLogFile()
 {
@@ -907,7 +828,6 @@ int   openLogFile()
 	logInit(outputPath);
 
 	return res;
-
 }
 
 
@@ -938,11 +858,8 @@ int   unloadGNS()
 	
 	logMessageEx("--- GNS uninitialized ");
 	
-
-
 	return res;
 }
-
 
 int   initDataRefs()
 {
@@ -1019,8 +936,6 @@ int   initDataRefs()
 	g_autopilot_state_ref = myXPLMFindDataRef("sim/cockpit/autopilot/autopilot_state");
 	if(NULL == g_autopilot_state_ref) dataRefsFound=false;
 
-	
-
 /*
 	g_override_nav1_needles_ref = myXPLMFindDataRef("sim/operation/override/override_nav1_needles");
 	if(NULL == g_override_nav1_needles_ref) dataRefsFound=false;
@@ -1043,11 +958,8 @@ int   initDataRefs()
 		logMessageEx("*** Error retrieving Data References");
 		res = -1;
 	}
-
-
 	return res;
 }
-
 
 int createMenus()
 {
@@ -1098,7 +1010,6 @@ int createMenus()
 		(void *) MENU_HIDE,
 		1);
 
-
 	XPLMAppendMenuSeparator(mySubMenu);
 	
 	XPLMAppendMenuItem(
@@ -1106,7 +1017,6 @@ int createMenus()
 		"Increase size",
 		(void *) MENU_SIZE_INC,
 		1);
-
 
 	XPLMAppendMenuItem(
 		mySubMenu,
@@ -1132,18 +1042,14 @@ int createMenus()
 	XPLMCheckMenuItem(mySubMenu, myMenuItemWAASAutoipilot, xplm_Menu_Unchecked);    	
 	autopilotConnected = false;
 
-	
 	logMessageEx("--- Menu created");
-	
 
 	return res;
 }
 
-
 int	createGNSWindow()
 {
 	int res = 0;
-
 
 	XPLMCreateWindow_t win;
 	win.structSize = sizeof(XPLMCreateWindow_t);
@@ -1219,14 +1125,12 @@ int	destroyGNSWindow()
 
 int	initClickRegions()
 {
-    
 
 	int res = 0;
 	regionLCD.x1 = (float)gpGNSIntf->bezel_lcd_left;
 	regionLCD.y1 = (float)gpGNSIntf->bezel_lcd_top;
 	regionLCD.x2 = (regionLCD.x1 + (float)gpGNSIntf->bezel_lcd_width);
 	regionLCD.y2 = (regionLCD.y1 + (float)gpGNSIntf->bezel_lcd_height);
-
 
 	return res;
 }

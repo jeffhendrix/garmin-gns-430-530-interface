@@ -4,12 +4,10 @@
 #include "sharedstruct.h"
 #include "gnsTypes.h"
 
-
 class CRCFile;
 class FileLog;
 class UdpSocketThread;
 class UdpSocket;
-
 
 class GNSx30Proxy
 {
@@ -33,7 +31,6 @@ public:
 
     void processUdpData(void* pData, int dataSize);
 
-
     //COM functions
     unsigned long getCOMActiveFrequency() { return m_comActive;}
     void  setCOMActiveFrequency(unsigned long freq);
@@ -48,7 +45,6 @@ public:
     unsigned long getNAVStandbyFrequency() { return m_navStandby;}
     void  setNAVStandbyFrequency(unsigned long freq);
 
-
     //GPS functions
     //latitude; //radians
     //longitude; //radians
@@ -58,7 +54,6 @@ public:
     //altitude; // m
     void  setGPSInfo(double	latitude, double longitude, float speed, float	heading, float verticalSpeed, float altitude);
 
-
 private:
     //COM/NAV frequencies
     unsigned long           m_comActive;
@@ -66,13 +61,12 @@ private:
     unsigned long           m_navActive;
     unsigned long           m_navStandby;
 
-
     GnsState                m_state;
 
-	char					m_trainter_path[MAX_PATH];
-	char					m_trainter_exe[MAX_PATH];
+   char					m_trainter_path[MAX_PATH];
+   char					m_trainter_exe[MAX_PATH];
     char					m_interface_lib[MAX_PATH];
-	HWND					m_win;
+   HWND					m_win;
 	
     SharedStruct<GNSIntf>*  m_pShared;
 	GNSIntf*				m_pvData;
@@ -82,8 +76,6 @@ private:
 
     UdpSocketThread*        m_pServerSocketThread; //This socket thread will receive data form the Garming Sim
     UdpSocket*              m_pClientSocket; //This socket thread will send data to the Garming Sim
-
-
 };	
 
 #endif // __GNSX30PROXY__

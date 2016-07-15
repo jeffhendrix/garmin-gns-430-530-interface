@@ -34,7 +34,6 @@ typedef unsigned long (__cdecl *FIL_vfs_write_t)(unsigned long p1, unsigned long
 ///
 typedef char* (__cdecl *TXT_get_string_t)(unsigned long p1);
 
-
 class TestHooks
 {
 public:
@@ -50,7 +49,6 @@ public:
     void  setStandbyFrequency(unsigned long freq);
 
     unsigned long   HWM_pvg_get_obs(unsigned long p1);
-
 
     unsigned long   TSK_pvg_get_timer(void);
     unsigned long   TSK_pvg_wait_evnt(unsigned long p1);
@@ -71,7 +69,6 @@ public:
 
     char*           TXT_get_string(unsigned long p1);
     
-
 private:
     void            lock();
     void            unlock();

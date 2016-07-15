@@ -24,7 +24,6 @@ struct DLPD_IAT_STUB
 };
 #pragma pack( pop )
 
-
 struct SFunctionHook
 {
     char* Name;         // Function name, e.g. "DirectDrawCreateEx".
@@ -43,10 +42,7 @@ struct SDLLHook
 
     // Function hook array.  Terminated with a NULL Name field.
     SFunctionHook Functions[];
-
-    
 };
-
 
 typedef void (*ModuleCallback_t)(LPCTSTR lpModuleName);
 bool EnumImportModules( ModuleCallback_t cb , HMODULE mod);
@@ -54,6 +50,5 @@ bool EnumImportModules( ModuleCallback_t cb , HMODULE mod);
 bool HookAPICallsMod( SDLLHook* Hook, HMODULE mod );
 
 void __cdecl DefaultHook( PVOID dummy );
-
 
 #endif

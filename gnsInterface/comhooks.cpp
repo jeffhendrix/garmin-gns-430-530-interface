@@ -31,16 +31,10 @@ static unsigned long __cdecl my_SYS_pvg_var_ctrl(unsigned long p1, unsigned long
     return ComHooks::instanace()->SYS_pvg_var_ctrl(p1, p2);
 }
 
-
-
-
-
-
 ComHooks* ComHooks::m_gInstance = NULL;
 
 ComHooks::ComHooks()
 {
-
     InitializeCriticalSection(&m_cs);
 
     m_activeComVal = 0xffffffff;
@@ -48,14 +42,11 @@ ComHooks::ComHooks()
 
     m_activeComSet = 0;
     m_standbyComSet = 0;
-
-
 }
 
 ComHooks::~ComHooks()
 {
     DeleteCriticalSection(&m_cs);
-
 }
 
 ComHooks* ComHooks::instanace()
@@ -66,8 +57,6 @@ ComHooks* ComHooks::instanace()
     }
 
     return m_gInstance;
-
-
 }
 
 void  ComHooks::lock()
@@ -80,13 +69,10 @@ void ComHooks::unlock()
     LeaveCriticalSection(&m_cs);
 }
 
-
 bool ComHooks::hook(SharedStruct<GNSIntf>*  pShared)
 {
-
     bool res = true;
     int i;
-
 
     m_pShared = pShared;
     m_pData = pShared->get();
@@ -106,8 +92,6 @@ bool ComHooks::hook(SharedStruct<GNSIntf>*  pShared)
         }
     };
 
-
-
     i=0;
     HookAPICallsMod(&krnlsimHook, h_cdp_com_box_sim);
     m_TSK_pvg_send_msg_ex_fn = (TSK_pvg_send_msg_ex_t)krnlsimHook.Functions[i++].OrigFn;
@@ -115,12 +99,8 @@ bool ComHooks::hook(SharedStruct<GNSIntf>*  pShared)
     m_reg_write_fn = (reg_write_t)krnlsimHook.Functions[i++].OrigFn;
     m_SYS_pvg_var_ctrl_fn = (SYS_pvg_var_ctrl_t)krnlsimHook.Functions[i++].OrigFn;
 
-
-
     return res;
 }
-
-
 
 //COM functions
 void  ComHooks::setActiveFrequency(unsigned long freq)
@@ -145,7 +125,6 @@ void  ComHooks::setStandbyFrequency(unsigned long freq)
     unlock();
 }
 
-
 unsigned long ComHooks::TSK_pvg_send_msg_ex(unsigned long p1, unsigned long p2)
 {
     unsigned long res=0;
@@ -161,11 +140,8 @@ unsigned long ComHooks::TSK_pvg_send_msg_ex(unsigned long p1, unsigned long p2)
     return res;
 }
 
-
-
 unsigned long ComHooks::reg_read(unsigned long num, unsigned long *addr, unsigned long size, unsigned long p4)
 {
-
     unsigned long res=0;
 
     lock();
@@ -185,12 +161,8 @@ unsigned long ComHooks::reg_read(unsigned long num, unsigned long *addr, unsigne
         m_standbyComSet = 0;
     }
 
-
-
     res = m_reg_read_fn(num, addr, size, p4);
-
-    
-
+ 
     unsigned long val = *(unsigned long*)addr;
     unsigned char ucval = *(unsigned char*)addr;
     //logMessageEx("--- ComHooks::reg_read %08x, %08x [%d][%d], %08x, %08x -> %08x", num, addr,  val, ucval, size, p4, res);
@@ -200,7 +172,6 @@ unsigned long ComHooks::reg_read(unsigned long num, unsigned long *addr, unsigne
     unlock();
 
     return res;
-
 }
 
 unsigned long ComHooks::reg_write(unsigned long num, unsigned long *addr, unsigned long size, unsigned long p4)
@@ -211,7 +182,6 @@ unsigned long ComHooks::reg_write(unsigned long num, unsigned long *addr, unsign
 
     res = m_reg_write_fn(num, addr, size, p4);
 
-
     unsigned long val = *(unsigned long*)addr;
     unsigned char ucval = *(unsigned char*)addr;
     //logMessageEx("--- ComHooks::reg_write %08x, %08x [%d][%d], %08x, %08x -> %08x", num, addr,  val, ucval, size, p4, res);
@@ -221,7 +191,6 @@ unsigned long ComHooks::reg_write(unsigned long num, unsigned long *addr, unsign
     unlock();
 
     return res;
-
 }
 
 unsigned long ComHooks::SYS_pvg_var_ctrl(unsigned long p1, unsigned long p2)
@@ -241,7 +210,6 @@ unsigned long ComHooks::SYS_pvg_var_ctrl(unsigned long p1, unsigned long p2)
     return res;
 }
 
-
 void ComHooks::checkFrequencies()
 {
     unsigned long val;
@@ -259,7 +227,6 @@ void ComHooks::checkFrequencies()
 
             Hooks::instanace()->notifyFreqencyChange(&msg);
         }
-
     }
 
     if( 0 == m_reg_read_fn(COM_STANDBY_REGISTER, &val, sizeof(val), 0))
@@ -274,8 +241,6 @@ void ComHooks::checkFrequencies()
             msg.freq = val;
 
             Hooks::instanace()->notifyFreqencyChange(&msg);
-
         }
     }
-
 }
