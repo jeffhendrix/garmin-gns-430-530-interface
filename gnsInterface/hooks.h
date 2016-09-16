@@ -5,7 +5,6 @@
 #include "sharedstruct.h"
 #include "gnsTypes.h"
 
-
 class UdpSocketThread;
 class UdpSocket;
 

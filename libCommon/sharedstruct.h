@@ -124,8 +124,6 @@ public:
         sa.lpSecurityDescriptor = pSD;
         sa.bInheritHandle = FALSE;
 
-
-
         // create new file mapping
         handle =
             ::CreateFileMapping(reinterpret_cast<HANDLE>(0xffffffff),
@@ -165,8 +163,6 @@ public:
 
         bool inherit = true;
 
-
-
         // open existing file mapping
         handle = ::OpenFileMapping(FILE_MAP_ALL_ACCESS,
             inherit,
@@ -190,7 +186,6 @@ public:
             //throw int(::GetLastError());
             return;
         }
-
     }
 
     ~SharedStruct()

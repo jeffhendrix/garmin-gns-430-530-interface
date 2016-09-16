@@ -1,11 +1,24 @@
-#include "mainwindow.h"
-#include <QApplication>
+#include <QtGui>
+#include "log.h"
+#include "mainWindow.h"
+
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+    char moduleName[MAX_PATH];
+    char logFileName[MAX_PATH];
 
-    return a.exec();
+    Q_INIT_RESOURCE(gnsRemote);
+    QApplication app(argc, argv);
+
+    GetModuleFileNameA(GetModuleHandle(0), moduleName, sizeof(moduleName));
+    sprintf(logFileName, "%s.log", moduleName);
+    logInit(logFileName);
+
+    MainWindow mainWindow;
+    mainWindow.show();
+
+    app.exec();
+      
+    return 0;
 }

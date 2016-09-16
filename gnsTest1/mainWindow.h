@@ -15,7 +15,7 @@ public:
 
     MainWindow(QWidget* pParent=0, Qt::WindowFlags flag=0);
     ~MainWindow();
-
+    void keyPressEvent(QKeyEvent* key);
     void    updateGUI();
 
 protected:
@@ -35,6 +35,8 @@ private slots:
     //GPS
     void    on_btnSetGPS_clicked ( bool checked = false );
     void    on_btnSimulateGPS_clicked ( bool checked = false );
+    void pressButton(int button);
+    void on_buttonOn_clicked();
 
 private:
     GNSx30Proxy m_GNSx30Proxy;

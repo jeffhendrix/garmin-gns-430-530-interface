@@ -32,7 +32,7 @@ void GnsViewWidget::setGNSx30Proxy(GNSx30Proxy* pGNSx30Proxy)
 
 int GnsViewWidget::getW()
 {
-    return DEFAULT_W;
+//    return DEFAULT_W;
 
     if(NULL != m_pGNSx30Proxy)
     {
@@ -46,7 +46,7 @@ int GnsViewWidget::getW()
 
 int GnsViewWidget::getH()
 {
-    return DEFAULT_H;
+//    return DEFAULT_H;
 
     if(NULL != m_pGNSx30Proxy)    
     {

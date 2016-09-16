@@ -39,11 +39,9 @@ int logInit(char* fileName)
 		gLogFile = NULL;
 	}
 
-
 	gLogFile = fopen(fileName, "w+t");
 	
 	return res;
-    
 }
 
 int logTerminate()
@@ -62,8 +60,6 @@ int logTerminate()
     
     return res;  
 }
-
-
 
 static void logMessage(char* msg)
 {
@@ -105,13 +101,11 @@ void logMessageEx(const char *fmt, ...)
                strncat(indentstr, "\t", MAX_LOG_LINE_LEN); 
             }
         }
-        
+
         sprintf(tempindent, "%s%s", indentstr, temp);
-       
-        
-       
+
         logMessage(tempindent);
-       
+
         va_end(ap);
 #if SERIALIZE_LOG
     LeaveCriticalSection(&gSC);

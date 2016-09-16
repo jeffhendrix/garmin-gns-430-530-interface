@@ -21,10 +21,9 @@ int WINAPI my_ChoosePixelFormat(HDC hdc, const PIXELFORMATDESCRIPTOR *ppfd)
 
 	res = g_ChoosePixelFormat(hdc, ppfd);
 
-
 	top_dc = hdc; 
 	
-    //logMessageEx("--- my_ChoosePixelFormat %08x -> %d", hdc, res);
+    logMessageEx("--- my_ChoosePixelFormat %08x -> %d", hdc, res);
 
 	return res;
 }
@@ -52,7 +51,6 @@ HGDIOBJ WINAPI my_SelectObject(HDC hdc, HGDIOBJ hgdiobj)
     return res;
 }
 
-
 typedef BOOL (WINAPI *BitBlt_t)(HDC hdcDest,int nXDest,int nYDest,int nWidth,int nHeight,HDC hdcSrc,int nXSrc,int nYSrc,DWORD dwRop);
 BitBlt_t	g_BitBlt;
 BOOL WINAPI my_BitBlt(HDC hdcDest,int nXDest,int nYDest,int nWidth,int nHeight,HDC hdcSrc,int nXSrc,int nYSrc,DWORD dwRop)
@@ -69,7 +67,6 @@ BOOL WINAPI my_BitBlt(HDC hdcDest,int nXDest,int nYDest,int nWidth,int nHeight,H
 
             my_dc = CreateCompatibleDC(top_dc);
 
-            
             BITMAPINFOHEADER BMI;
             // Fill in the header info.
             BMI.biSize = sizeof(BITMAPINFOHEADER);
@@ -89,12 +86,10 @@ BOOL WINAPI my_BitBlt(HDC hdcDest,int nXDest,int nYDest,int nWidth,int nHeight,H
             my_bitmap = CreateDIBSection (my_dc, (BITMAPINFO *)&BMI,
                 DIB_RGB_COLORS, (void **)&pSrcBits, memMap, 0);
 
-
             SelectObject(my_dc, my_bitmap);
 
-            logMessageEx("--- my_BitBlt LCD bitmap= %dx%d", nWidth, nHeight);
-            
-
+            //logMessageEx("--- my_BitBlt LCD bitmap= %dx%d", nWidth, nHeight);
+           
         }
 
         res = g_BitBlt(my_dc, nXDest, nYDest, nWidth,  nHeight,  hdcSrc, nXSrc, nYSrc, dwRop);
@@ -125,20 +120,16 @@ HBITMAP  WINAPI my_CreateCompatibleBitmap(HDC hdc, int nWidth, int nHeight)
 	return res;
 }
 
-
-
 typedef int (WINAPI *StretchDIBits_t)(HDC hdc,int XDest,int YDest,int nDestWidth,int nDestHeight,int XSrc,int YSrc,int nSrcWidth,int nSrcHeight,const VOID *lpBits,const BITMAPINFO *lpBitsInfo,UINT iUsage,DWORD dwRop);
 StretchDIBits_t g_StretchDIBits;
 int WINAPI my_StretchDIBits(HDC hdc,int XDest,int YDest,int nDestWidth,int nDestHeight,int XSrc,int YSrc,int nSrcWidth,int nSrcHeight,const VOID *lpBits,const BITMAPINFO *lpBitsInfo,UINT iUsage,DWORD dwRop)
 {
 	int res;
     res = g_StretchDIBits(hdc,XDest,YDest,nDestWidth,nDestHeight,XSrc,YSrc,nSrcWidth,nSrcHeight,lpBits,lpBitsInfo,iUsage,dwRop);
-    //logMessageEx("--- g_StretchDIBits hdc=%08x,XDest=%d,YDest=%d,nDestWidth=%d,nDestHeight=%d,XSrc=%d,YSrc=%d,nSrcWidth=%d,nSrcHeight=%d,lpBits=%08x,lpBitsInfo=%08x,iUsage=%d,dwRop=%08x", 
-    //    hdc,XDest,YDest,nDestWidth,nDestHeight,XSrc,YSrc,nSrcWidth,nSrcHeight,lpBits,lpBitsInfo,iUsage,dwRop);
+    logMessageEx("--- g_StretchDIBits hdc=%08x,XDest=%d,YDest=%d,nDestWidth=%d,nDestHeight=%d,XSrc=%d,YSrc=%d,nSrcWidth=%d,nSrcHeight=%d,lpBits=%08x,lpBitsInfo=%08x,iUsage=%d,dwRop=%08x", 
+        hdc,XDest,YDest,nDestWidth,nDestHeight,XSrc,YSrc,nSrcWidth,nSrcHeight,lpBits,lpBitsInfo,iUsage,dwRop);
 	return res;
 }
-
-
 
 static SDLLHook krnlsimGDIHook = 
 {
@@ -161,15 +152,12 @@ int hook_gdi(SharedStruct<GNSIntf>* pSharedStruct)
 	int res = 0;
 	int i;
 	
-    
 	pIntf = pSharedStruct->get();
     memMap = pSharedStruct->getHandle();
 
-    //logMessageEx("--- hook_gdi=%08x", pIntf);
-
+    logMessageEx("--- hook_gdi=%08x", pIntf);
 
 	HMODULE h_krnlsim = GetModuleHandle("krnlsim.dll");
-
 
 	i = 0;
 	HookAPICallsMod(&krnlsimGDIHook, h_krnlsim);
@@ -179,8 +167,6 @@ int hook_gdi(SharedStruct<GNSIntf>* pSharedStruct)
 	//g_CreateCompatibleBitmap = (CreateCompatibleBitmap_t)krnlsimGDIHook.Functions[i++].OrigFn;
 	//g_SelectObject = (SelectObject_t)krnlsimGDIHook.Functions[i++].OrigFn;
 	//g_StretchDIBits = (StretchDIBits_t)krnlsimGDIHook.Functions[i++].OrigFn;
-
-	
 
 	return res;
 }

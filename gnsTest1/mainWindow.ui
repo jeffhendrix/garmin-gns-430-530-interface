@@ -70,7 +70,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabCOM">
       <attribute name="title">
@@ -284,12 +284,18 @@
          <property name="maximum">
           <double>360.000000000000000</double>
          </property>
+         <property name="value">
+          <double>254.900000000000006</double>
+         </property>
         </widget>
        </item>
        <item row="0" column="1">
         <widget class="QDoubleSpinBox" name="spinLatitude">
          <property name="maximum">
           <double>360.000000000000000</double>
+         </property>
+         <property name="value">
+          <double>39.899999999999999</double>
          </property>
         </widget>
        </item>
@@ -342,6 +348,9 @@
         <widget class="QDoubleSpinBox" name="spinAltitude">
          <property name="maximum">
           <double>10000.000000000000000</double>
+         </property>
+         <property name="value">
+          <double>6000.000000000000000</double>
          </property>
         </widget>
        </item>
@@ -407,6 +416,19 @@
       <widget class="QPushButton" name="btnStop">
        <property name="text">
         <string>Stop</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="buttonOn">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>On</string>
        </property>
       </widget>
      </item>

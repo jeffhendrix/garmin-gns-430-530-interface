@@ -10,7 +10,6 @@ typedef unsigned long (__cdecl *reg_read_t)(unsigned long num, unsigned long *ad
 typedef unsigned long (__cdecl *reg_write_t)(unsigned long num, unsigned long *addr, unsigned long size, unsigned long p4);
 typedef unsigned long (__cdecl *SYS_pvg_var_ctrl_t)(unsigned long p1, unsigned long p2);
 
-
 class IopSimHooks
 {
 public:

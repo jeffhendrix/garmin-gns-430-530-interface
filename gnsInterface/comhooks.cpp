@@ -109,7 +109,7 @@ void  ComHooks::setActiveFrequency(unsigned long freq)
 
     m_activeComSet = freq;
 
-    //logMessageEx("--- ComHooks::setActiveFrequency %d", freq);
+    logMessageEx("--- ComHooks::setActiveFrequency %d", freq);
 
     unlock();
 }
@@ -120,7 +120,7 @@ void  ComHooks::setStandbyFrequency(unsigned long freq)
 
     m_standbyComSet = freq;
 
-    //logMessageEx("--- ComHooks::setActiveFrequency %d", freq);
+    logMessageEx("--- ComHooks::setStandbyFrequency %d", freq);
 
     unlock();
 }
@@ -133,7 +133,7 @@ unsigned long ComHooks::TSK_pvg_send_msg_ex(unsigned long p1, unsigned long p2)
 
     res =  m_TSK_pvg_send_msg_ex_fn(p1, p2);
 
-    //logMessageEx("--- ComHooks::TSK_pvg_send_msg_ex %08x, %08x -> %08x", p1, p2, res);
+    logMessageEx("--- ComHooks::TSK_pvg_send_msg_ex %08x, %08x -> %08x", p1, p2, res);
 
     unlock();
 
@@ -146,7 +146,7 @@ unsigned long ComHooks::reg_read(unsigned long num, unsigned long *addr, unsigne
 
     lock();
 
-    //Check is a frequency must be set
+    //Check if a frequency must be set
     if(0 != m_activeComSet)
     {
         m_reg_write_fn(COM_ACTIVE_REGISTER, &m_activeComSet, sizeof(m_activeComSet), 0);
@@ -165,7 +165,7 @@ unsigned long ComHooks::reg_read(unsigned long num, unsigned long *addr, unsigne
  
     unsigned long val = *(unsigned long*)addr;
     unsigned char ucval = *(unsigned char*)addr;
-    //logMessageEx("--- ComHooks::reg_read %08x, %08x [%d][%d], %08x, %08x -> %08x", num, addr,  val, ucval, size, p4, res);
+    logMessageEx("--- ComHooks::reg_read %08x, %08x [%d][%d], %08x, %08x -> %08x", num, addr,  val, ucval, size, p4, res);
 
     checkFrequencies();
 
@@ -184,7 +184,7 @@ unsigned long ComHooks::reg_write(unsigned long num, unsigned long *addr, unsign
 
     unsigned long val = *(unsigned long*)addr;
     unsigned char ucval = *(unsigned char*)addr;
-    //logMessageEx("--- ComHooks::reg_write %08x, %08x [%d][%d], %08x, %08x -> %08x", num, addr,  val, ucval, size, p4, res);
+    logMessageEx("--- ComHooks::reg_write %08x, %08x [%d][%d], %08x, %08x -> %08x", num, addr,  val, ucval, size, p4, res);
 
     checkFrequencies();
 
@@ -201,7 +201,7 @@ unsigned long ComHooks::SYS_pvg_var_ctrl(unsigned long p1, unsigned long p2)
 
     res = m_SYS_pvg_var_ctrl_fn(p1, p2);
 
-    //logMessageEx("--- ComHooks::SYS_pvg_var_ctrl %08x, %08x", p1, p2);
+    logMessageEx("--- ComHooks::SYS_pvg_var_ctrl %08x, %08x", p1, p2);
     
     checkFrequencies();
 
@@ -214,11 +214,11 @@ void ComHooks::checkFrequencies()
 {
     unsigned long val;
     
-    if( 0 == m_reg_read_fn(COM_ACTIVE_REGISTER, &val, sizeof(val), 0))
+    if( 0 == m_reg_read_fn(COM_ACTIVE_REGISTER, &val, sizeof(val), 0))  // reads active com register from garmin sim
     {
         if(val != m_activeComVal)
         {
-            //logMessageEx("----- COM_ACTIVE_REGISTER %d", val);
+            logMessageEx("----- COM_ACTIVE_REGISTER %d", val);
 
             m_activeComVal = val;
             FreqInfo msg;
@@ -229,11 +229,11 @@ void ComHooks::checkFrequencies()
         }
     }
 
-    if( 0 == m_reg_read_fn(COM_STANDBY_REGISTER, &val, sizeof(val), 0))
+    if( 0 == m_reg_read_fn(COM_STANDBY_REGISTER, &val, sizeof(val), 0))	// reads active com register from garmin sim
     {
         if(val != m_standbyComVal)
         {
-            //logMessageEx("----- COM_STANDBY_REGISTER %d", val);
+            logMessageEx("----- COM_STANDBY_REGISTER %d", val);
 
             m_standbyComVal = val;
             FreqInfo msg;

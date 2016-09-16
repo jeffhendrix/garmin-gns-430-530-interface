@@ -6,14 +6,10 @@
 #include "testhooks.h"
 #include "log.h"
 
-
-
-
 static unsigned long __cdecl my_HWM_pvg_get_obs(unsigned long p1)
 {
     return TestHooks::instanace()->HWM_pvg_get_obs(p1);
 }
-
 
 static unsigned long __cdecl my_TSK_pvg_wait_evnt(unsigned long p1)
 {
@@ -103,10 +99,6 @@ static char* __cdecl my_TXT_get_string(unsigned long p1)
 }
 
 
-
-
-
-
 TestHooks* TestHooks::m_gInstance = NULL;
 
 TestHooks::TestHooks()
@@ -130,7 +122,6 @@ TestHooks* TestHooks::instanace()
     }
 
     return m_gInstance;
-
 
 }
 
@@ -162,8 +153,6 @@ bool TestHooks::hook(SharedStruct<GNSIntf>*  pShared)
     //hMod = GetModuleHandle("sys_resource.dll");
     hMod = GetModuleHandle("IOP_B.dll");
 
-
-    
 //#pragma warning FIXME
     SDLLHook krnlsimHook = 
     {
@@ -193,8 +182,6 @@ bool TestHooks::hook(SharedStruct<GNSIntf>*  pShared)
         }
     };
 
-
-
     i=0;
     HookAPICallsMod(&krnlsimHook, hMod);
     
@@ -215,15 +202,12 @@ bool TestHooks::hook(SharedStruct<GNSIntf>*  pShared)
     m_FIL_vfs_rename_fn = (FIL_vfs_rename_t)krnlsimHook.Functions[i++].OrigFn;
     m_FIL_vfs_write_fn = (FIL_vfs_write_t)krnlsimHook.Functions[i++].OrigFn;
 
-
-
     SDLLHook sysresourcesHook = 
     {
         "sys_resource.dll",
         false, NULL, // Default hook disabled, NULL function pointer.
         //true, DefaultHook,
         {
-
             { "TXT_get_string", my_TXT_get_string},
             { NULL, NULL }
         }
@@ -231,9 +215,6 @@ bool TestHooks::hook(SharedStruct<GNSIntf>*  pShared)
     i=0;
     HookAPICallsMod(&sysresourcesHook, hMod);
     m_TXT_get_string_fn = (TXT_get_string_t)sysresourcesHook.Functions[i++].OrigFn;
-
-
-
 
     return res;
 }
@@ -249,9 +230,7 @@ unsigned long TestHooks::HWM_pvg_get_obs(unsigned long p1)
     logMessageEx("--- TestHooks::HWM_pvg_get_obs %08x [%08x][%d]-> %08x", p1, *pAddr, *pAddr, res);
 
     return res;
-
 }
-
 
 unsigned long TestHooks::TSK_pvg_wait_evnt(unsigned long p1)
 {
@@ -259,7 +238,7 @@ unsigned long TestHooks::TSK_pvg_wait_evnt(unsigned long p1)
 
     res = m_TSK_pvg_wait_evnt_fn(p1);
 
-    //logMessageEx("--- TestHooks::TSK_pvg_wait_evnt %08x -> %08x", p1, res);
+    logMessageEx("--- TestHooks::TSK_pvg_wait_evnt %08x -> %08x", p1, res);
 
     return res;
 }
@@ -270,10 +249,9 @@ unsigned long TestHooks::TSK_pvg_get_timer(void)
 
     res = m_TSK_pvg_get_timer_fn();
 
-    //logMessageEx("--- TestHooks::TSK_pvg_get_timer -> %d", res);
+    logMessageEx("--- TestHooks::TSK_pvg_get_timer -> %d", res);
 
     return res;
-
 }
 
 unsigned long TestHooks::TSK_pvg_send_msg_ex(unsigned long p1, unsigned long p2)
@@ -284,11 +262,8 @@ unsigned long TestHooks::TSK_pvg_send_msg_ex(unsigned long p1, unsigned long p2)
 
     logMessageEx("--- TestHooks::TSK_pvg_send_msg_ex %08x, %08x -> %08x", p1, p2, res);
 
-
     return res;
-
 }
-
 
 unsigned long TestHooks::TSK_pvg_proc_status(unsigned long p1)
 {
@@ -307,8 +282,6 @@ unsigned long TestHooks::TSK_pvg_get_msg(unsigned long p1, unsigned long p2)
     unsigned long val1;
     unsigned long val2;
 
-
-
     unsigned long* pval1 = (unsigned long*)p1;
     unsigned long* pval2 = (unsigned long*)p2;
     *pval1 = 0;
@@ -317,7 +290,7 @@ unsigned long TestHooks::TSK_pvg_get_msg(unsigned long p1, unsigned long p2)
     val1 = *(unsigned long*)p1;
     val2 = *(unsigned long*)p2;
 
-    //logMessageEx("--- TestHooks::TSK_pvg_get_msg IN %08x [%08x], %08x [%08x] -> %08x", p1, val1, p2, val2, res);
+    logMessageEx("--- TestHooks::TSK_pvg_get_msg IN %08x [%08x], %08x [%08x] -> %08x", p1, val1, p2, val2, res);
 
     res =  m_TSK_pvg_get_msg_fn(p1, p2);
     //res = 1;
@@ -333,15 +306,11 @@ unsigned long TestHooks::TSK_pvg_get_msg(unsigned long p1, unsigned long p2)
     logMessageEx("--- TestHooks::TSK_pvg_get_msg %08x [%08x], %08x [%08x] -> %08x", p1, val1, p2, val2, res);
 
     return res;
-
 }
-
-
 
 unsigned long TestHooks::reg_read(unsigned long num, unsigned long *addr, unsigned long size, unsigned long p4)
 {
     unsigned long res=0;
-
 
     res = m_reg_read_fn(num, addr, size, p4);
 
@@ -350,7 +319,6 @@ unsigned long TestHooks::reg_read(unsigned long num, unsigned long *addr, unsign
     logMessageEx("--- TestHooks::reg_read %08x, %08x [%d][%d], %08x, %08x -> %08x", num, addr,  val, ucval, size, p4, res);
 
     return res;
-
 }
 
 unsigned long TestHooks::reg_write(unsigned long num, unsigned long *addr, unsigned long size, unsigned long p4)
@@ -364,7 +332,6 @@ unsigned long TestHooks::reg_write(unsigned long num, unsigned long *addr, unsig
     res = m_reg_write_fn(num, addr, size, p4);
 
     return res;
-
 }
 
 unsigned long TestHooks::SYS_pvg_var_ctrl(unsigned long p1, unsigned long p2)
@@ -381,44 +348,37 @@ unsigned long TestHooks::SYS_pvg_var_ctrl(unsigned long p1, unsigned long p2)
     return res;
 }
 
-
 unsigned long TestHooks::FIL_vfs_open(char* name, unsigned long p1, unsigned long p2)
 {
     unsigned long res=0;
-
 
     res = m_FIL_vfs_open_fn(name, p1, p2);
 
     logMessageEx("--- TestHooks::FIL_vfs_open %s %08x, %08x -> %08x", name, p1, p2,  res);
 
     return res;
-
 }
 
 unsigned long TestHooks::FIL_vfs_mmap(unsigned long p1, unsigned long p2, unsigned long p3, unsigned long p4, unsigned long p5, unsigned long p6)
 {
     unsigned long res=0;
 
-
     res = m_FIL_vfs_mmap_fn(p1, p2, p3, p4, p5, p6);
 
     logMessageEx("--- TestHooks::FIL_vfs_mmap %08x, %08x, %08x, %08x, %08x, %08x ->%08x", p1, p2, p3, p4, p5, p6, res);
 
     return res;
-
 }
 
 unsigned long TestHooks::mem_unmap(unsigned long p1, unsigned long p2)
 {
     unsigned long res=0;
 
-
     res = m_mem_unmap_fn(p1, p2);
 
     logMessageEx("--- TestHooks::mem_unmap %08x, %08x -> %08x", p1, p2, res);
 
     return res;
-
 }
 
 
@@ -432,7 +392,6 @@ unsigned long TestHooks::FIL_vfs_seek(unsigned long p1, unsigned long p2, unsign
     logMessageEx("--- TestHooks::FIL_vfs_seek %08x, %08x, %08x ->%08x", p1, p2, p3, res);
 
     return res;
-
 }
 
 void TestHooks::FIL_vfs_close(unsigned long p1)
@@ -454,7 +413,6 @@ unsigned long TestHooks::FIL_vfs_rename(char* p1, char* p2)
     logMessageEx("--- TestHooks::FIL_vfs_rename %s, %s -> %08x", p1, p2, res);
 
     return res;
-
 }
 
 
@@ -468,10 +426,7 @@ unsigned long TestHooks::FIL_vfs_write(unsigned long p1, unsigned long p2, unsig
     logMessageEx("--- TestHooks::FIL_vfs_write %08x, %08x, %08x ->%08x", p1, p2, p3, res);
 
     return res;
-
 }
-
-
 
 //Resources
 char*  TestHooks::TXT_get_string(unsigned long p1)

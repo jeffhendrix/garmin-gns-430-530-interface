@@ -28,6 +28,7 @@ public:
 	bool close();
 	GNSIntf* getInterface();
 	int sendMsg(int up, int x, int y );
+    int sendKey(int up, int key );
 
     void processUdpData(void* pData, int dataSize);
 
@@ -65,7 +66,7 @@ private:
 
    char					m_trainter_path[MAX_PATH];
    char					m_trainter_exe[MAX_PATH];
-    char					m_interface_lib[MAX_PATH];
+   char					m_interface_lib[MAX_PATH];
    HWND					m_win;
 	
     SharedStruct<GNSIntf>*  m_pShared;

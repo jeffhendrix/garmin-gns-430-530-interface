@@ -7,27 +7,21 @@
 #include "log.h"
 
 
-
 static unsigned long __cdecl my_SIM_proc_rqst(unsigned long p1)
 {
     return KrlnsimHooks::instanace()->SIM_proc_rqst(p1);
 }
 
-
-
 KrlnsimHooks* KrlnsimHooks::m_gInstance = NULL;
 
 KrlnsimHooks::KrlnsimHooks()
 {
-
     InitializeCriticalSection(&m_cs);
-
 }
 
 KrlnsimHooks::~KrlnsimHooks()
 {
     DeleteCriticalSection(&m_cs);
-
 }
 
 KrlnsimHooks* KrlnsimHooks::instanace()
@@ -38,8 +32,6 @@ KrlnsimHooks* KrlnsimHooks::instanace()
     }
 
     return m_gInstance;
-
-
 }
 
 void  KrlnsimHooks::lock()
@@ -52,19 +44,15 @@ void KrlnsimHooks::unlock()
     LeaveCriticalSection(&m_cs);
 }
 
-
 bool KrlnsimHooks::hook(SharedStruct<GNSIntf>*  pShared)
 {
-
     bool res = true;
     int i;
-
 
     m_pShared = pShared;
     m_pData = pShared->get();
 
     HMODULE krnlsim = GetModuleHandle("krnlsim.dll");
-
 
     SDLLHook G530SIMHook = 
     {
@@ -79,12 +67,8 @@ bool KrlnsimHooks::hook(SharedStruct<GNSIntf>*  pShared)
     i=0;
     m_SIM_proc_rqst_fn = (SIM_proc_rqst_t)G530SIMHook.Functions[i++].OrigFn;
 
-
     return res;
 }
-
-
-
 
 unsigned long KrlnsimHooks::SIM_proc_rqst(unsigned long p1)
 {

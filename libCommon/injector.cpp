@@ -125,7 +125,6 @@ BOOL CodeCaveInjectDll(IN char* szDllPath, /*IN DWORD dwProcessId,*/ HANDLE hPro
         PVOID pszDllPath = VirtualAllocEx(hProcess, NULL, DllPath_size, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
         //PVOID pszDllPath = VirtualAllocEx(hProcess, NULL, _tcsclen(szDllPath) + 1, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
         
-        
         //gpLogger->logMessageEx("pszDllPath=%08x", pszDllPath);
         
         if (pszDllPath)
@@ -263,7 +262,6 @@ DWORD GetModule(IN DWORD dwProcessId, IN char* szModuleNameOrPath, IN BOOL bFull
             
             //strcpy(szCompare, T2A(me.szExePath));
             
-
             if (!bFullPath)
             {
                 //szCompare = PathFindFileNameA(me.szExePath);
@@ -312,12 +310,12 @@ int startAndInject(char* pExeName, char* pExePath, char* pLibFile, bool hideGUI)
     }
     
     CreateProcess(NULL, pExeName,
-                             0, 0, false,
-                            CREATE_SUSPENDED | CREATE_UNICODE_ENVIRONMENT, 
-                            NULL, 
-                            pExePath,
-                            &siStartupInfo, 
-                            &piProcessInfo
+                         0, 0, false,
+                        CREATE_SUSPENDED | CREATE_UNICODE_ENVIRONMENT,
+                        NULL,
+                        pExePath,
+                        &siStartupInfo,
+                        &piProcessInfo
                     );
                
     if (DWORD dwProcessId = piProcessInfo.dwProcessId)    
@@ -336,7 +334,6 @@ int startAndInject(char* pExeName, char* pExePath, char* pLibFile, bool hideGUI)
                 ghProcess = piProcessInfo.hProcess;
                 ghThread = piProcessInfo.hThread;
             }
-
         }
         else if (dwModule)
         {
@@ -390,8 +387,6 @@ int checkProcessTerminated()
         {
             res = -1;
         }
-        
-      
     }
         
     return res;

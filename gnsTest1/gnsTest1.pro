@@ -1,6 +1,7 @@
 TARGET		 = gnsTest1
 QT          += opengl
 QT          += widgets
+QT += core
 
 LIBS += -lopengl32
 LIBS += -luser32
@@ -23,7 +24,8 @@ INCLUDEPATH	+= ../libGnsProxy
 #HEADERS  += main.h
 SOURCES	 += main.cpp
 
-HEADERS   += gnsViewWidget.h
+HEADERS   += gnsViewWidget.h \
+    keymap.h
 SOURCES   += gnsViewWidget.cpp
 
 FORMS     += mainWindow.ui

@@ -13,13 +13,12 @@ public:
     GnsViewWidget(QWidget *parent = 0, const QGLWidget * shareWidget = 0);
     ~GnsViewWidget();
 
-    void    setGNSx30Proxy(GNSx30Proxy*    pGNSx30Proxy);
+    void    setGNSx30Proxy(GNSx30Proxy* pGNSx30Proxy);
     int     getW();
     int     getH();
 
 public slots:
     void onUpdateTimer();
-
 
 protected:
 

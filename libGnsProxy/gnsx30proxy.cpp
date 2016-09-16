@@ -9,7 +9,7 @@
 #include "crcfile.h"
 #include "log.h"
 #include "config.h"
-
+#include <QDebug>
 
 #define TRAINER_PORT  5000
 #define PROXY_PORT    (TRAINER_PORT+1)
@@ -18,12 +18,10 @@ void UdpDataCallback(void* pData, int dataSize, void* context)
 {
     GNSx30Proxy* pGNSx30Proxy = (GNSx30Proxy*)context;
     pGNSx30Proxy->processUdpData(pData, dataSize);
-
 }
 
 GNSx30Proxy::GNSx30Proxy()
 {
-    
 	m_pCRCFile = new CRCFile();
 
 	m_win = NULL;
@@ -418,6 +416,7 @@ int GNSx30Proxy::sendMsg(int up, int x, int y )
 	
 	DWORD lParam;
 
+    qDebug() << x << y;
     if(NULL == 	m_win)	
     {
         m_win = FindWindow("AfxFrameOrView42", "GARMIN 400W/500W Trainer");
@@ -439,6 +438,32 @@ int GNSx30Proxy::sendMsg(int up, int x, int y )
 	}
 
 	return res;
+}
+
+int GNSx30Proxy::sendKey(int up, int key )
+{
+    int res = 0;
+
+    DWORD wParam;
+
+    if(NULL == 	m_win)
+    {
+        m_win = FindWindow("AfxFrameOrView42", "GARMIN 400W/500W Trainer");
+    }
+
+    if(NULL != m_win)
+    {
+        wParam = key;
+        if(up)
+        {
+            PostMessage(m_win, WM_KEYDOWN, wParam, 0);
+        }else
+        {
+            PostMessage(m_win, WM_KEYUP, wParam, 0);
+        }
+    }
+
+    return res;
 }
 
 void GNSx30Proxy::processUdpData(void* pData, int dataSize)
@@ -468,7 +493,7 @@ void GNSx30Proxy::processUdpData(void* pData, int dataSize)
             {
                 FreqInfo* pFreqInfo = (FreqInfo*)pData;
                 m_navActive = pFreqInfo->freq;
-                //logMessageEx("--- GNSx30Proxy::processUdpData m_navActive %d", m_comActive);
+                //logMessageEx("--- GNSx30Proxy::processUdpData m_navActive %d", m_navActive);
                 break;
             }
             case MSG_NAV_STANDBY:

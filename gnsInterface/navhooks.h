@@ -55,8 +55,6 @@ private:
     reg_write_t		        m_reg_write_fn;
     SYS_pvg_var_ctrl_t		m_SYS_pvg_var_ctrl_fn;
 
-
-
 };
 
 

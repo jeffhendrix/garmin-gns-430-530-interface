@@ -1,5 +1,7 @@
 #include <windows.h>
 #include "mainWindow.h"
+#include "keymap.h"
+#include <QDebug>
 
 #define DEG2RAD (0.0174532925f)
 
@@ -43,6 +45,15 @@ void MainWindow::updateGUI()
     ulval = m_GNSx30Proxy.getNAVStandbyFrequency();
     ui.spinNAVStandby->setValue((float)ulval/1000.0f);
 
+}
+
+void MainWindow::keyPressEvent(QKeyEvent* key)
+{
+   if (key->text().toUpper() == "S")
+   {
+      qDebug("pressed");
+   }
+   qDebug() << key->text();
 }
 
 void MainWindow::resizeEvent ( QResizeEvent * event )
@@ -107,6 +118,7 @@ void MainWindow::on_btnStart_clicked ( bool checked  )
 
     ui.gnsViewWidget->setGNSx30Proxy(&m_GNSx30Proxy);
     QTimer::singleShot(10, this, SLOT(onRepositionViewWidget()));
+    pressButton(0);
 }
 
 void MainWindow::on_btnStop_clicked ( bool checked  )
@@ -187,4 +199,24 @@ void MainWindow::on_btnSimulateGPS_clicked ( bool checked )
 {
     Q_UNUSED(checked);
 
+}
+
+void MainWindow::pressButton(int button)
+{
+    m_GNSx30Proxy.sendMsg(0, keymap[button].x, keymap[button].y);
+    for(int d=0; d <10; d++)
+    {
+        Sleep(10);
+        qApp->processEvents();
+    }
+    m_GNSx30Proxy.sendMsg(1, keymap[button].x, keymap[button].y);
+}
+
+void MainWindow::on_buttonOn_clicked()
+{
+    for (int i = 0; i<26; i++)
+    {
+        pressButton(i);
+        Sleep(100);
+    }
 }

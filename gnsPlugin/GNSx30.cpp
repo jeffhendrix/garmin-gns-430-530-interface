@@ -385,7 +385,7 @@ int myHandleMouseClickCallback(XPLMWindowID inWindowID, int x, int y, XPLMMouseS
 		my =  1.0f - (float)dY/(float)(Top - Bottom);
 		
 		
-        //logMessageEx("### xplm_MouseDown %d,%d -> %f,%f", dX, dY, mx, my);
+        logMessageEx("### xplm_MouseDown %d,%d -> %f,%f", dX, dY, mx, my);
 
 		// The window is left, top (0,0) right bottom (BEZEL_WIDTH, BEZEL_HEIGHT)
         mouse_pos_x = (int)(mx*gpGNSIntf->bezel_width);
@@ -397,13 +397,13 @@ int myHandleMouseClickCallback(XPLMWindowID inWindowID, int x, int y, XPLMMouseS
 			Height = Top - Bottom;
 			gDragging = 1;
 
-            //logMessageEx("### xplm_MouseDown gDragging=1");
+            logMessageEx("### xplm_MouseDown gDragging=1");
 
 		}else
 		{
 			gGNSx30Proxy.sendMsg(0,mouse_pos_x ,mouse_pos_y );
 
-            //logMessageEx("### xplm_MouseDown sendMsg(%d,%d)", mouse_pos_x ,mouse_pos_y);
+            logMessageEx("### xplm_MouseDown sendMsg(%d,%d)", mouse_pos_x ,mouse_pos_y);
 		}
 
 		break;
@@ -421,12 +421,12 @@ int myHandleMouseClickCallback(XPLMWindowID inWindowID, int x, int y, XPLMMouseS
 
 			XPLMSetWindowGeometry(inWindowID, Left, Top, Right, Bottom);
 
-            //logMessageEx("### xplm_MouseDrag");
+            logMessageEx("### xplm_MouseDrag");
 		}
 		break;
 	case xplm_MouseUp:
 
-        //logMessageEx("### xplm_MouseUp gDragging=%d", gDragging);
+        logMessageEx("### xplm_MouseUp gDragging=%d", gDragging);
 
 		if(!gDragging)
 		{
