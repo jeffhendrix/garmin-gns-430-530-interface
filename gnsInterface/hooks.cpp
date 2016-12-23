@@ -98,7 +98,33 @@ bool Hooks::hookGnsx30(HMODULE hModule)
         pIntf->bezel_lcd_top = 27;
         pIntf->bezel_lcd_width = 320;
         pIntf->bezel_lcd_height = 234;
-    }
+	}
+	else  if (TYPE_GTN650 == pIntf->gnsType)
+	{
+		//Read the bezel bitmaps from the Gns exe
+		hBmp = (HBITMAP) ::LoadImage(hModule,
+			MAKEINTRESOURCE(IDB_BEZEL_530), IMAGE_BITMAP, 0, 0,
+			LR_CREATEDIBSECTION);
+		::GetObject(hBmp, sizeof(bezelBMP), &bezelBMP);
+
+		pIntf->bezel_lcd_left = 75;
+		pIntf->bezel_lcd_top = 27;
+		pIntf->bezel_lcd_width = 320;
+		pIntf->bezel_lcd_height = 234;
+	}
+	else  if (TYPE_GTN750 == pIntf->gnsType)
+	{
+		//Read the bezel bitmaps from the Gns exe
+		hBmp = (HBITMAP) ::LoadImage(hModule,
+			MAKEINTRESOURCE(IDB_BEZEL_530), IMAGE_BITMAP, 0, 0,
+			LR_CREATEDIBSECTION);
+		::GetObject(hBmp, sizeof(bezelBMP), &bezelBMP);
+
+		pIntf->bezel_lcd_left = 75;
+		pIntf->bezel_lcd_top = 27;
+		pIntf->bezel_lcd_width = 320;
+		pIntf->bezel_lcd_height = 234;
+	}
 
     ::GetObject (hBmp, sizeof (bezelBMP), &bezelBMP);
 
@@ -140,7 +166,7 @@ bool Hooks::hookGnsx30(HMODULE hModule)
 
 #else
 
-#pragma warning TESTHOOKS
+//#pragma warning TESTHOOKS
     TestHooks::instanace()->hook(m_pShared);
 #endif
 

@@ -8,7 +8,8 @@
 //#pragma warning FIXME (move this to a separate file)
 
 //HWM
-typedef unsigned long (__cdecl *HWM_pvg_get_obs_t)(unsigned long p1);
+typedef unsigned long(__cdecl *HWM_pvg_get_obs_t)(unsigned long p1);
+typedef unsigned long(__cdecl *HWM_pvg_put_uart_t)(unsigned long p1, unsigned long p2, unsigned long p3);
 
 //TSK
 typedef unsigned long (__cdecl *TSK_pvg_wait_evnt_t)(unsigned long p1);
@@ -49,6 +50,7 @@ public:
     void  setStandbyFrequency(unsigned long freq);
 
     unsigned long   HWM_pvg_get_obs(unsigned long p1);
+	unsigned long   HWM_pvg_put_uart(unsigned long p1, unsigned long p2, unsigned long p3);
 
     unsigned long   TSK_pvg_get_timer(void);
     unsigned long   TSK_pvg_wait_evnt(unsigned long p1);
@@ -82,6 +84,7 @@ private:
     GNSIntf*                m_pData;
 
     HWM_pvg_get_obs_t       m_HWM_pvg_get_obs_fn;
+	HWM_pvg_put_uart_t      m_HWM_pvg_put_uart_fn;
 
     TSK_pvg_get_timer_t     m_TSK_pvg_get_timer_fn;
     TSK_pvg_wait_evnt_t     m_TSK_pvg_wait_evnt_fn; 
@@ -98,7 +101,6 @@ private:
     FIL_vfs_close_t         m_FIL_vfs_close_fn;
     FIL_vfs_rename_t        m_FIL_vfs_rename_fn;
     FIL_vfs_write_t         m_FIL_vfs_write_fn;
-
 
     TXT_get_string_t        m_TXT_get_string_fn;
 

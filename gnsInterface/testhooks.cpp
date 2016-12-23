@@ -11,6 +11,11 @@ static unsigned long __cdecl my_HWM_pvg_get_obs(unsigned long p1)
     return TestHooks::instanace()->HWM_pvg_get_obs(p1);
 }
 
+static unsigned long __cdecl my_HWM_pvg_put_uart(unsigned long p1, unsigned long p2, unsigned long p3)
+{
+	return TestHooks::instanace()->HWM_pvg_put_uart(p1, p2, p3);
+}
+
 static unsigned long __cdecl my_TSK_pvg_wait_evnt(unsigned long p1)
 {
     return TestHooks::instanace()->TSK_pvg_wait_evnt(p1);
@@ -91,7 +96,6 @@ static unsigned long  __cdecl my_FIL_vfs_write(unsigned long p1, unsigned long p
     return TestHooks::instanace()->FIL_vfs_write(p1, p2, p3);
 }
 
-
 ////
 static char* __cdecl my_TXT_get_string(unsigned long p1)
 {
@@ -103,15 +107,12 @@ TestHooks* TestHooks::m_gInstance = NULL;
 
 TestHooks::TestHooks()
 {
-
     InitializeCriticalSection(&m_cs);
-
 }
 
 TestHooks::~TestHooks()
 {
     DeleteCriticalSection(&m_cs);
-
 }
 
 TestHooks* TestHooks::instanace()
@@ -151,8 +152,10 @@ bool TestHooks::hook(SharedStruct<GNSIntf>*  pShared)
     //hMod = GetModuleHandle("cdp_vloc_box_sim.dll");
     //hMod = GetModuleHandle("cdp_annun_box_sim.dll");
     //hMod = GetModuleHandle("sys_resource.dll");
-    hMod = GetModuleHandle("IOP_B.dll");
-
+	//hMod = GetModuleHandle("IOP_B.dll"); 
+	//hMod = GetModuleHandle("IOP_C.dll"); // HWM_pvg_updt_obi
+	hMod = GetModuleHandle("IOP_SIM.dll");
+	
 //#pragma warning FIXME
     SDLLHook krnlsimHook = 
     {
@@ -160,24 +163,22 @@ bool TestHooks::hook(SharedStruct<GNSIntf>*  pShared)
         //false, NULL, // Default hook disabled, NULL function pointer.
         true, DefaultHook,
         {
-
             { "HWM_pvg_get_obs", my_HWM_pvg_get_obs},
-            { "TSK_pvg_wait_evnt", my_TSK_pvg_wait_evnt},
+			{ "TSK_pvg_wait_evnt", my_TSK_pvg_wait_evnt },
             { "TSK_pvg_get_timer", my_TSK_pvg_get_timer},
             { "TSK_pvg_send_msg_ex", my_TSK_pvg_send_msg_ex},
             { "TSK_pvg_get_msg", my_TSK_pvg_get_msg},
             { "TSK_pvg_proc_status", my_TSK_pvg_proc_status},
             { "reg_read", my_reg_read},
             { "reg_write", my_reg_write},
-            { "SYS_pvg_var_ctrl" , my_SYS_pvg_var_ctrl},
-            { "FIL_vfs_open" , my_FIL_vfs_open},
-            { "FIL_vfs_mmap" , my_FIL_vfs_mmap},
-            { "mem_unmap" , my_mem_unmap},
+            { "SYS_pvg_var_ctrl" , my_SYS_pvg_var_ctrl}, //
+            { "FIL_vfs_open" , my_FIL_vfs_open}, //
+            { "FIL_vfs_mmap" , my_FIL_vfs_mmap}, //
+            { "mem_unmap" , my_mem_unmap},		
             { "FIL_vfs_seek" , my_FIL_vfs_seek},
-            { "FIL_vfs_close" , my_FIL_vfs_close},
+            { "FIL_vfs_close" , my_FIL_vfs_close},	//
             { "FIL_vfs_rename" , my_FIL_vfs_rename},
-            { "FIL_vfs_write" , my_FIL_vfs_write},
-            
+			{ "FIL_vfs_write", my_FIL_vfs_write },
             { NULL, NULL }
         }
     };
@@ -219,17 +220,29 @@ bool TestHooks::hook(SharedStruct<GNSIntf>*  pShared)
     return res;
 }
 
-unsigned long TestHooks::HWM_pvg_get_obs(unsigned long p1)
+unsigned long TestHooks::HWM_pvg_get_obs(unsigned long p1)  // IOP_B.dll
 {
     unsigned long res=0;
 
     res = m_HWM_pvg_get_obs_fn(p1);
 
-    unsigned long* pAddr = (unsigned long*)p1;
+	unsigned short* pAddr = (unsigned short*)p1;
 
-    logMessageEx("--- TestHooks::HWM_pvg_get_obs %08x [%08x][%d]-> %08x", p1, *pAddr, *pAddr, res);
+	logMessageEx("--- TestHooks::HWM_pvg_get_obs %08x [%04x]-> %08x", p1, *pAddr, res);
 
     return res;
+}
+
+unsigned long TestHooks::HWM_pvg_put_uart(unsigned long p1, unsigned long p2, unsigned long p3)
+{
+	unsigned long res = 0;
+	unsigned short* pAddr = (unsigned short*)p1;
+
+	logMessageEx("--- TestHooks::HWM_pvg_put_uart %08x %08x [%08x]-> %08x", p1, p2, *pAddr, res);
+
+	res = m_HWM_pvg_put_uart_fn(p1, p2, p3);
+
+	return res;
 }
 
 unsigned long TestHooks::TSK_pvg_wait_evnt(unsigned long p1)
@@ -249,7 +262,7 @@ unsigned long TestHooks::TSK_pvg_get_timer(void)
 
     res = m_TSK_pvg_get_timer_fn();
 
-    logMessageEx("--- TestHooks::TSK_pvg_get_timer -> %d", res);
+    //logMessageEx("--- TestHooks::TSK_pvg_get_timer -> %d", res);
 
     return res;
 }
@@ -313,10 +326,33 @@ unsigned long TestHooks::reg_read(unsigned long num, unsigned long *addr, unsign
     unsigned long res=0;
 
     res = m_reg_read_fn(num, addr, size, p4);
+	unsigned char ucval = *(unsigned char*)addr;
+	unsigned short usval = *(unsigned short*)addr;
+	unsigned long val = *(unsigned long*)addr;
+	unsigned long llval = *(unsigned long*)(addr + 1);
+	unsigned long llval2 = *(unsigned long*)(addr + 2);
+	unsigned long llval3 = *(unsigned long*)(addr + 3);
 
-    unsigned long val = *(unsigned long*)addr;
-    unsigned char ucval = *(unsigned char*)addr;
-    logMessageEx("--- TestHooks::reg_read %08x, %08x [%d][%d], %08x, %08x -> %08x", num, addr,  val, ucval, size, p4, res);
+	switch (size) {
+	case 1:
+		logMessageEx("--- TestHooks::reg_read %08x, %08x [%02x], %08x, %08x -> %08x", num, addr, ucval, size, p4, res);
+		break;
+	case 2:
+		logMessageEx("--- TestHooks::reg_read %08x, %08x [%04x], %08x, %08x -> %08x", num, addr, usval, size, p4, res);
+		break;
+	case 4:
+		logMessageEx("--- TestHooks::reg_read %08x, %08x [%08x], %08x, %08x -> %08x", num, addr, val, size, p4, res);
+		break;
+	case 8:
+		logMessageEx("--- TestHooks::reg_read %08x, %08x [%08x %08x], %08x, %08x -> %08x", num, addr, val, llval, size, p4, res);
+		break;
+	case 16:
+		logMessageEx("--- TestHooks::reg_read %08x, %08x [%08x %08x %08x %08x], %08x, %08x -> %08x", num, addr, val, llval, llval2, llval3, size, p4, res);
+		break;
+	default:
+		logMessageEx("--- TestHooks::reg_read %08x, %08x [%08x %08x %08x %08x], %08x, %08x -> %08x", num, addr, val, llval, llval2, llval3, size, p4, res);
+		break;
+	}
 
     return res;
 }
@@ -327,7 +363,7 @@ unsigned long TestHooks::reg_write(unsigned long num, unsigned long *addr, unsig
 
     unsigned long val = *(unsigned long*)addr;
     unsigned char ucval = *(unsigned char*)addr;
-    logMessageEx("--- TestHooks::reg_write %08x, %08x [%d][%d], %08x, %08x -> %08x", num, addr,  val, ucval, size, p4, res);
+    logMessageEx("--- TestHooks::reg_write %08x, %08x [%08x], %08x, %08x -> %08x", num, addr,  val, size, p4, res);
 
     res = m_reg_write_fn(num, addr, size, p4);
 

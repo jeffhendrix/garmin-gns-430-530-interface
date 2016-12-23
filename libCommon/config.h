@@ -7,6 +7,8 @@
 
 #define TYPE_GNS430	430
 #define TYPE_GNS530	530
+#define TYPE_GTN650  650
+#define TYPE_GTN750  750
 
 
 #define OFFSCREEN_BUFFER_WIDTH 512
@@ -20,6 +22,17 @@
 #define GNS_530AWT "GNS 530AWT"
 
 #define GNSX30EXE_CRC 0x192813d1
+
+#define GTN_TRAINER_PATH "C:\\Program Files (x86)\\Garmin\\GTN Trainer\\GTN\\sys\\sim"
+#define GTN_TRAINER_EXE "C:\\Program Files (x86)\\Garmin\\GTN Trainer\\GTN\\sys\\sim\\GTN Simulator.exe"
+#define INTERFACE_LIB "C:\\Program Files (x86)\\Garmin\\gnsInterface.dll"
+
+#define GTNSIMEXE_PATH "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\G530SIM.exe"
+#define GARMIN_GTN "Software\\Garmin\\GTN1\\GTN Simulator"
+#define GARMIN_GTN_SETTINGS "Software\\Garmin\\GTN1\\GTN Simulator\\GTNSim"
+#define GARMIN_GTN_WINDOW "Software\\Garmin\\GTN1\\GTN Simulator\\GTNSim"
+#define GTN_650 "GTN 650"
+#define GTN_750 "GTN 750"
 
 #define PI					(3.14159265f)
 

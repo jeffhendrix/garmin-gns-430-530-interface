@@ -87,6 +87,7 @@ bool NavHooks::hook(SharedStruct<GNSIntf>*  pShared)
     SDLLHook krnlsimHook = 
     {
         "krnlsim.dll",
+		//true, DefaultHook,
         false, NULL, // Default hook disabled, NULL function pointer.
         {
             { "TSK_pvg_send_msg_ex", my_TSK_pvg_send_msg_ex},
@@ -125,7 +126,7 @@ void  NavHooks::setStandbyFrequency(unsigned long freq)
 
     m_standbyNavSet = freq;
 
-    logMessageEx("--- NavHooks::setActiveFrequency %d", freq);
+    logMessageEx("--- NavHooks::setStandbyFrequency %d", freq);
 
     unlock();
 }
@@ -172,7 +173,7 @@ unsigned long NavHooks::reg_read(unsigned long num, unsigned long *addr, unsigne
 
     unsigned long val = *(unsigned long*)addr;
     unsigned char ucval = *(unsigned char*)addr;
-    logMessageEx("--- NavHooks::reg_read %08x, %08x [%d][%d], %08x, %08x -> %08x", num, addr,  val, ucval, size, p4, res);
+    //logMessageEx("--- NavHooks::reg_read %08x, %08x [%d][%d], %08x, %08x -> %08x", num, addr,  val, ucval, size, p4, res);
 
     checkFrequencies();
 

@@ -82,6 +82,7 @@ bool ComHooks::hook(SharedStruct<GNSIntf>*  pShared)
     SDLLHook krnlsimHook = 
     {
         "krnlsim.dll",
+		//true, DefaultHook,
         false, NULL, // Default hook disabled, NULL function pointer.
         {
             { "TSK_pvg_send_msg_ex", my_TSK_pvg_send_msg_ex},

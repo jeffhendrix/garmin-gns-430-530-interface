@@ -90,21 +90,27 @@ BOOL CodeCaveInjectDll(IN char* szDllPath, /*IN DWORD dwProcessId,*/ HANDLE hPro
     SIZE_T DllPath_size = sizeof(char) * (_tcslen(szDllPath) + 1);
 
     // get size of loader code
-    DWORD dwSizeLoader = (DWORD)SearchDWORD(loader, LDR_CODE_END) - (DWORD)loader;
+    PVOID startLoader = loader; // if jmp (0xE9), then add jmp offset + 5
+    if (*(PBYTE)startLoader == 0xE9)
+    {
+        PDWORD offset = (PDWORD)((PBYTE&)startLoader + 1);
+        (PBYTE&)startLoader += (*offset + 5);
+    }
+    DWORD dwSizeLoader = (DWORD)SearchDWORD(startLoader, LDR_CODE_END) - (DWORD)startLoader;
 
-    //gpLogger->logMessageEx("dwSizeLoader=%d", dwSizeLoader);
+    logMessageEx("dwSizeLoader=%d", dwSizeLoader);
 
     // allocate local buffer for loader code
     PVOID pLdrCode = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwSizeLoader);
     
-    //gpLogger->logMessageEx("pLdrCode=%08x", pLdrCode);
+    logMessageEx("pLdrCode=%08x", pLdrCode);
     
-    memcpy(pLdrCode, loader, dwSizeLoader);
+    memcpy(pLdrCode, startLoader, dwSizeLoader);
 
     // get pointer to first data variable (pReturnAddr)
     PDWORD pData = (PDWORD)SearchDWORD(pLdrCode, LDR_DATA_START);
     
-    //gpLogger->logMessageEx("pData=%08x", pData);
+    logMessageEx("pData=%08x", pData);
 
     HMODULE hmod = GetModuleHandle("kernel32.dll");
     
@@ -125,13 +131,13 @@ BOOL CodeCaveInjectDll(IN char* szDllPath, /*IN DWORD dwProcessId,*/ HANDLE hPro
         PVOID pszDllPath = VirtualAllocEx(hProcess, NULL, DllPath_size, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
         //PVOID pszDllPath = VirtualAllocEx(hProcess, NULL, _tcsclen(szDllPath) + 1, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
         
-        //gpLogger->logMessageEx("pszDllPath=%08x", pszDllPath);
+        logMessageEx("pszDllPath=%08x", pszDllPath);
         
         if (pszDllPath)
         {
             // write dll path
             BOOL wpr = WriteProcessMemory(hProcess, pszDllPath, szDllPath, DllPath_size, NULL);
-            //gpLogger->logMessageEx("wpr=%d", wpr);
+            logMessageEx("wpr=%d", wpr);
             if (wpr)
             {
                 // fill loader code pszDllPath data
@@ -154,7 +160,7 @@ BOOL CodeCaveInjectDll(IN char* szDllPath, /*IN DWORD dwProcessId,*/ HANDLE hPro
                             
                             
                             PVOID pRemoteLdr = VirtualAllocEx(hProcess, NULL, dwSizeLoader, MEM_RESERVE | MEM_COMMIT, PAGE_EXECUTE_READWRITE);
-                            //gpLogger->logMessageEx("pRemoteLdr=%08x", pRemoteLdr);
+                            logMessageEx("pRemoteLdr=%08x", pRemoteLdr);
                             if (pRemoteLdr)
                             {
                                 // write loader code
@@ -182,10 +188,10 @@ BOOL CodeCaveInjectDll(IN char* szDllPath, /*IN DWORD dwProcessId,*/ HANDLE hPro
                                                 //Sleep(125);
                                                 Sleep(500);
                                                 // get pRetVal of our allocated loader code in target process
-                                                //BOOL rpm = 
+                                                BOOL rpm =
                                                 ReadProcessMemory(hProcess, (PVOID)((PBYTE)pRemoteLdr + (dwSizeLoader - 4)), &dwRetValue, 4, NULL);
                                                 // check for default value
-                                                //gpLogger->logMessageEx("Checking for check for default value rpm=%d dwRetValue=%08x", rpm, dwRetValue);
+                                                logMessageEx("Checking for check for default value rpm=%d dwRetValue=%08x", rpm, dwRetValue);
                                                 logMessageEx("--- Waiting for process to start");
                                             } while (dwRetValue == 0xFFFFFFFF);
 

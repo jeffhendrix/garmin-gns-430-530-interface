@@ -1,6 +1,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <stdio.h>
+#include <VersionHelpers.h>
 #include "apihijack.h"
 #include "log.h"
 
@@ -27,12 +28,11 @@ void __cdecl DefaultHook( PVOID dummy )
         if(
             //0 ==strcmp("SIM_lock_display", (PSTR)pDLPDStub->pszNameOrOrdinal) ||
             //0 ==strcmp("SIM_unlock_display", (PSTR)pDLPDStub->pszNameOrOrdinal) ||
-            //0 ==strcmp("SIM_hwm_gp_outp8", (PSTR)pDLPDStub->pszNameOrOrdinal) ||
+            0 ==strcmp("SIM_hwm_gp_outp8", (PSTR)pDLPDStub->pszNameOrOrdinal) ||
             0 == strcmp("SYS_enter_krnl", (PSTR)pDLPDStub->pszNameOrOrdinal) ||
             0 == strcmp("SYS_exit_krnl", (PSTR)pDLPDStub->pszNameOrOrdinal) ||
             0 == strcmp("TSK_pvg_reserve_smphr", (PSTR)pDLPDStub->pszNameOrOrdinal) ||
             0 == strcmp("TSK_pvg_release_smphr", (PSTR)pDLPDStub->pszNameOrOrdinal) ||
-           
             
             false
             )
@@ -41,15 +41,12 @@ void __cdecl DefaultHook( PVOID dummy )
         }else
         {
             logMessageEx("###: %s", (PSTR)pDLPDStub->pszNameOrOrdinal);
-            
         }
     }
 
 
     __asm   popad   // Restore all general purpose registers
 }
-
-
 
 // This function must be __cdecl!!!
 void __cdecl DelayLoadProfileDLL_UpdateCount( PVOID dummy );
@@ -92,11 +89,6 @@ bool RedirectIAT( SDLLHook* DLLHook, PIMAGE_IMPORT_DESCRIPTOR pImportDesc, PVOID
 
 	//NICA
 	bool functionFound;
-
-    // Figure out which OS platform we're on
-    OSVERSIONINFO osvi; 
-    osvi.dwOSVersionInfoSize = sizeof(osvi);
-    GetVersionEx( &osvi );
 
     // If no import names table, we can't redirect this, so bail
     if ( pImportDesc->OriginalFirstThunk == 0 )
@@ -244,7 +236,7 @@ bool RedirectIAT( SDLLHook* DLLHook, PIMAGE_IMPORT_DESCRIPTOR pImportDesc, PVOID
 				//OutputDebugString( "IsBadWritePtr " );
                 pIteratingIAT->u1.Function = (DWORD)(HookFn);
             }
-            else if ( osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS )
+			else if (!IsWindowsXPOrGreater())
             {
                 // Special hack for Win9X, which builds stubs for imported
                 // functions in system DLLs (Loaded above 2GB).  These stubs are
@@ -288,7 +280,7 @@ bool HookAPICallsMod( SDLLHook* Hook , HMODULE mod)
     
     if ( !pExeNTHdr )
 	{
-		logMessageEx("^^^ PEHeaderFromHModule Error " );
+		logMessageEx("^^^ PEHeaderFromHModule Error. " );
         return false;
 	}
 
@@ -344,7 +336,7 @@ bool EnumImportModules( ModuleCallback_t cb , HMODULE mod)
     
     if ( !pExeNTHdr )
 	{
-		logMessageEx("^^^ PEHeaderFromHModule Error " );
+		logMessageEx("^^^ PEHeaderFromHModule Error! " );
         return false;
 	}
 

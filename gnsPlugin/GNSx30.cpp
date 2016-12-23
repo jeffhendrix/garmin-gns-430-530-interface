@@ -684,7 +684,6 @@ float	myFlightLoopCallback(float inElapsedSinceLastCall, float inElapsedTimeSinc
 			hsi_obs_deg_mag_pilot = pIntf->dtk;
 			XPLMSetDataf(g_hsi_obs_deg_mag_pilot_ref, hsi_obs_deg_mag_pilot); 
 
-			
 			XPLMSetDataf(g_gps_hdef_dot_ref, pIntf->cdi_horizontal_offtrack);
 
 		}else
@@ -892,7 +891,7 @@ int   initDataRefs()
 	if(NULL == g_com1_active_ref) dataRefsFound=false;
 
 	g_nav1_standby_ref = myXPLMFindDataRef("sim/cockpit2/radios/actuators/nav1_standby_frequency_hz");
-	if(NULL == g_com1_standby_ref) dataRefsFound=false;
+	if (NULL == g_nav1_standby_ref) dataRefsFound = false;
 
 	g_nav1_active_ref = myXPLMFindDataRef("sim/cockpit2/radios/actuators/nav1_frequency_hz");
 	if(NULL == g_com1_active_ref) dataRefsFound=false;

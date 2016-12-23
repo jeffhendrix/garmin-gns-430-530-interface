@@ -9,7 +9,7 @@
 #include "crcfile.h"
 #include "log.h"
 #include "config.h"
-#include <QDebug>
+//#include <QDebug>
 
 #define TRAINER_PORT  5000
 #define PROXY_PORT    (TRAINER_PORT+1)
@@ -301,14 +301,30 @@ bool GNSx30Proxy::open(int gnsType)
     m_pClientSocket  = new UdpSocket();
     m_pClientSocket->openForSending(dest_address, m_pvData->garminTrainerPort); //||| enter socket
 
-    if (ERROR_SUCCESS!= RegCreateKeyEx(HKEY_CURRENT_USER, GARMIN_INTERNATIONAL_SETTINGS, 0, NULL, 
-        REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey,&dwDisposition)
-        )
+    if(TYPE_GNS430 == gnsType || TYPE_GNS530 == gnsType)
     {
-        logMessageEx("??? GNSx30Proxy::open Error creating key " GARMIN_INTERNATIONAL_SETTINGS);
+        if (ERROR_SUCCESS!= RegCreateKeyEx(HKEY_CURRENT_USER, GARMIN_INTERNATIONAL_SETTINGS, 0, NULL,
+            REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey,&dwDisposition)
+            )
+        {
+            logMessageEx("??? GNSx30Proxy::open Error creating key " GARMIN_INTERNATIONAL_SETTINGS);
+            return false;
+        }
+        strcpy(m_interface_lib, INTERFACE_LIB);
+    }
 
-        res = false;
-        return res;
+    if(TYPE_GTN650 == gnsType || TYPE_GTN750 == gnsType)
+    {
+        if (ERROR_SUCCESS!= RegCreateKeyEx(HKEY_CURRENT_USER, GARMIN_GTN_SETTINGS, 0, NULL,
+            REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey,&dwDisposition)
+            )
+        {
+            logMessageEx("??? GNSx30Proxy::open Error creating key " GARMIN_GTN_SETTINGS);
+            return false;
+        }
+        strcpy(m_trainter_exe, GTN_TRAINER_EXE);
+        strcpy(m_trainter_path, GTN_TRAINER_PATH);
+        strcpy(m_interface_lib, INTERFACE_LIB);
     }
 
     if(TYPE_GNS430 == gnsType)
@@ -317,9 +333,7 @@ bool GNSx30Proxy::open(int gnsType)
         if (ERROR_SUCCESS != RegSetValueEx(hKey, "CDUType", 0, REG_SZ, (LPBYTE)GNS_430AWT, strlen(GNS_430AWT) + 1))
         {
             logMessageEx("??? GNSx30Proxy::open Error writing key CDUType");
-
-            res = false;
-            return res;
+            return false;
         }
     }else if(TYPE_GNS530 == gnsType)
     {
@@ -327,9 +341,23 @@ bool GNSx30Proxy::open(int gnsType)
         if (ERROR_SUCCESS != RegSetValueEx(hKey, "CDUType", 0, REG_SZ, (LPBYTE)GNS_530AWT, strlen(GNS_530AWT) + 1))
         {
             logMessageEx("??? GNSx30Proxy::open Error writing key CDUType");
-
-            res = false;
-            return res;
+            return false;
+        }
+    }else if(TYPE_GTN650 == gnsType)
+    {
+        //Create the trainer settings values
+        if (ERROR_SUCCESS != RegSetValueEx(hKey, "UnitType", 0, REG_SZ, (LPBYTE)GTN_650, strlen(GTN_650) + 1))
+        {
+            logMessageEx("??? GNSx30Proxy::open Error writing key CDUType");
+            return false;
+        }
+    }else if(TYPE_GTN750 == gnsType)
+    {
+        //Create the trainer settings values
+        if (ERROR_SUCCESS != RegSetValueEx(hKey, "UnitType", 0, REG_SZ, (LPBYTE)GTN_750, strlen(GTN_750) + 1))
+        {
+            logMessageEx("??? GNSx30Proxy::open Error writing key CDUType");
+            return false;
         }
     }
 
@@ -357,9 +385,8 @@ bool GNSx30Proxy::open(int gnsType)
 	if(!procesStarted)
 	{
 		logMessageEx("??? GNSx30Proxy::Open Error starting process %s", m_trainter_exe);
-		res = false;
-		return res;
-	}
+        return false;
+    }
 
     m_state = stateOpened;
 
@@ -416,7 +443,6 @@ int GNSx30Proxy::sendMsg(int up, int x, int y )
 	
 	DWORD lParam;
 
-    qDebug() << x << y;
     if(NULL == 	m_win)	
     {
         m_win = FindWindow("AfxFrameOrView42", "GARMIN 400W/500W Trainer");
